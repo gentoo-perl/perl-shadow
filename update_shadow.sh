@@ -4,6 +4,9 @@ if [[ "x$1" == "x" ]]; then
   exit 1;
 fi
 
+src='/usr/portage';
+dest=$1;
+
 einfo() {
   echo -ne "\e[1;32m [info]\e[0;32m ";
   echo -ne $@
@@ -11,6 +14,10 @@ einfo() {
   echo
 }
 
-einfo "Builiding $1 from /usr/portage";
-rsync -avp /usr/portage/dev-perl/ $1/dev-perl/
-rsync -avp /usr/portage/perl-core/ $1/perl-core/
+einfo "Builiding $dest from $src";
+
+rsync -avp $src/dev-perl/ $dest/dev-perl/
+rsync -avp $src/perl-core/ $dest/perl-core/
+for i in $(cat $dest/dev-lang.list); do
+  rsync -avp $src/dev-lang/$i/ $dest/dev-lang/$i/
+done
