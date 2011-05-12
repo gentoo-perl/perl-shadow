@@ -13,3 +13,4 @@ einfo() {
 
 einfo "Builiding $1 from /usr/portage";
 rsync -avp /usr/portage/dev-perl/ $1/dev-perl/
+rsync -avp /usr/portage/perl-core/ $1/perl-core/
