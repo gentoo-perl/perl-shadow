@@ -6,6 +6,8 @@ fi
 
 src='/usr/portage';
 dest=$1;
+RSYNC='rsync -avp --delete-delay'
+
 
 einfo() {
   echo -ne "\e[1;32m [info]\e[0;32m ";
@@ -16,8 +18,10 @@ einfo() {
 
 einfo "Builiding $dest from $src";
 
-rsync -avp $src/dev-perl/ $dest/dev-perl/
-rsync -avp $src/perl-core/ $dest/perl-core/
+$RSYNC $src/dev-perl/ $dest/dev-perl/
+$RSYNC $src/perl-core/ $dest/perl-core/
+$RSYNC --filter="-! /perl-*/***" $src/virtual/ $dest/virtual/
 for i in $(cat $dest/dev-lang.list); do
-  rsync -avp $src/dev-lang/$i/ $dest/dev-lang/$i/
+  $RSYNC $src/dev-lang/$i/ $dest/dev-lang/$i/
 done
+
