@@ -6,6 +6,9 @@ fi
 
 src='/usr/portage';
 dest=$1;
+updaterdir=$dest/updater
+listdir=$updaterdir/lists
+
 RSYNC='rsync -avp --delete-delay'
 
 
@@ -21,7 +24,9 @@ einfo "Builiding $dest from $src";
 $RSYNC $src/dev-perl/ $dest/dev-perl/
 $RSYNC $src/perl-core/ $dest/perl-core/
 $RSYNC --filter="-! /perl-*/***" $src/virtual/ $dest/virtual/
-for i in $(cat $dest/dev-lang.list); do
-  $RSYNC $src/dev-lang/$i/ $dest/dev-lang/$i/
+for listcat in $listdir/*.list ; do
+  srcfile=$(basename $listcat);
+  category=${srcfile/.list};
+  $RSYNC $src/$category/ $dest/$category/ --files-from=${listcat};
 done
 
