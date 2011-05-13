@@ -20,13 +20,27 @@ einfo() {
 }
 
 einfo "Builiding $dest from $src";
-
+einfo "all: dev-perl";
 $RSYNC $src/dev-perl/ $dest/dev-perl/
+einfo "all: perl-core";
 $RSYNC $src/perl-core/ $dest/perl-core/
+einfo "prefixed: perl-* : virtual"
 $RSYNC --filter="-! /perl-*/***" $src/virtual/ $dest/virtual/
 for listcat in $listdir/*.list ; do
   srcfile=$(basename $listcat);
   category=${srcfile/.list};
+  einfo "list selective: $category"
   $RSYNC $src/$category/ $dest/$category/ --files-from=${listcat};
 done
 
+einfo "Regenerating Categories list"
+cat <(
+  echo 'dev-perl';
+  echo 'perl-core';
+  echo 'virtual';
+  for listcat in $listdir/*.list; do
+    srcfile=$(basename $listcat);
+    category=${srcfile/.list};
+    echo $category;
+  done
+) | sort -u >| $dest/profiles/categories
