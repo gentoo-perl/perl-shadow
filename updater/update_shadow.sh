@@ -25,12 +25,15 @@ $RSYNC $src/dev-perl/ $dest/dev-perl/
 einfo "all: perl-core";
 $RSYNC $src/perl-core/ $dest/perl-core/
 einfo "prefixed: perl-* : virtual"
-$RSYNC --filter="-! /perl-*/***" $src/virtual/ $dest/virtual/
+$RSYNC --filter="-! /perl-*/***" $src/virtual/ $dest/virtual/ --delete-excluded
 for listcat in $listdir/*.list ; do
   srcfile=$(basename $listcat);
   category=${srcfile/.list};
   einfo "list selective: $category"
-  $RSYNC $src/$category/ $dest/$category/ --files-from=${listcat};
+  $RSYNC $src/$category/ $dest/$category/ \
+    --filter="merge,n+/ ${listcat}" \
+    --filter="- */" \
+    --filter="- /*" --delete-excluded
 done
 
 einfo "Regenerating Categories list"
