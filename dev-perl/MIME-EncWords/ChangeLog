@@ -1,0 +1,27 @@
+# ChangeLog for dev-perl/MIME-EncWords
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/MIME-EncWords/ChangeLog,v 1.5 2011/01/02 22:25:47 hwoarang Exp $
+
+  02 Jan 2011; Markos Chandras <hwoarang@gentoo.org>
+  MIME-EncWords-1.012.ebuild:
+  Stable on amd64 wrt bug #349266
+
+  31 Dec 2010; Christian Faulhammer <fauli@gentoo.org>
+  MIME-EncWords-1.012.ebuild:
+  stable x86, bug 349266
+
+  15 Aug 2010; Torsten Veller <tove@gentoo.org>
+  -MIME-EncWords-1.011.1.ebuild:
+  Cleanup
+
+*MIME-EncWords-1.012 (22 Jun 2010)
+
+  22 Jun 2010; Torsten Veller <tove@gentoo.org> +MIME-EncWords-1.012.ebuild:
+  Version bump
+
+*MIME-EncWords-1.011.1 (22 Mar 2010)
+
+  22 Mar 2010; Torsten Veller <tove@gentoo.org>
+  +MIME-EncWords-1.011.1.ebuild, +metadata.xml:
+  Initial import for www-apps/postfixadmin (#310065). Thanks to Andreis Vinogradovs
+
