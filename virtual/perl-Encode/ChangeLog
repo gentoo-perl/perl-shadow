@@ -1,6 +1,16 @@
 # ChangeLog for virtual/perl-Encode
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/virtual/perl-Encode/ChangeLog,v 1.26 2011/06/12 23:58:24 mattst88 Exp $
+# $Header: /var/cvsroot/gentoo-x86/virtual/perl-Encode/ChangeLog,v 1.28 2011/06/18 20:20:50 tove Exp $
+
+*perl-Encode-2.420.0-r2 (18 Jun 2011)
+
+  18 Jun 2011; Torsten Veller <tove@gentoo.org> -perl-Encode-2.420.0-r1.ebuild,
+  +perl-Encode-2.420.0-r2.ebuild:
+  Add perl-5.14 as provider
+
+  15 Jun 2011; Naohiro Aota <naota@gentoo.org> perl-Encode-2.40.ebuild,
+  perl-Encode-2.420.0-r1.ebuild, perl-Encode-2.430.0.ebuild:
+  Add ~x86-fbsd, bug #358079
 
   12 Jun 2011; Matt Turner <mattst88@gentoo.org> perl-Encode-2.430.0.ebuild:
   Added ~mips, bug 358079
