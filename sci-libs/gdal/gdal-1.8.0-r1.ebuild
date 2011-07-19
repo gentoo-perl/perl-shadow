@@ -1,17 +1,19 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sci-libs/gdal/gdal-1.8.0-r1.ebuild,v 1.4 2011/07/05 01:00:30 nerdboy Exp $
+# $Header: /var/cvsroot/gentoo-x86/sci-libs/gdal/gdal-1.8.0-r1.ebuild,v 1.6 2011/07/18 14:33:43 scarabeus Exp $
 
-EAPI="2"
+EAPI=2
 
 WANT_AUTOCONF="2.5"
+
 RUBY_OPTIONAL="yes"
 USE_RUBY="ruby18"
+
 PYTHON_DEPEND="python? 2:2.6"
 
 inherit autotools eutils libtool perl-module python ruby-ng toolchain-funcs
 
-DESCRIPTION="GDAL is a translator library for raster geospatial data formats (includes OGR support)"
+DESCRIPTION="Translator library for raster geospatial data formats (includes OGR support)"
 HOMEPAGE="http://www.gdal.org/"
 SRC_URI="http://download.osgeo.org/gdal/${P}.tar.gz"
 
@@ -104,7 +106,7 @@ src_configure() {
 	fi
 
 	# pcidsk is internal, because there is no such library yet released
-	# 	also that thing is developed by the gdal people
+	#     also that thing is developed by the gdal people
 	# kakadu, mrsid jp2mrsid - another jpeg2k stuff, ignore
 	# bsb - legal issues
 	# oracle - disabled, i dont have and can't test
