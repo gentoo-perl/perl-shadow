@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sci-libs/gdal/gdal-1.8.0-r1.ebuild,v 1.6 2011/07/18 14:33:43 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/sci-libs/gdal/gdal-1.8.1.ebuild,v 1.3 2011/07/26 16:21:29 neurogeek Exp $
 
 EAPI=2
 
@@ -85,7 +85,6 @@ src_prepare() {
 		swig/python/GNUmakefile || die
 
 	epatch "${FILESDIR}"/1.7.2-ruby_cflags.patch
-	epatch "${FILESDIR}"/gdal-png-1.5.patch
 
 	# -soname is only accepted by GNU ld/ELF
 	[[ ${CHOST} == *-darwin* ]] \
@@ -250,11 +249,16 @@ src_install() {
 
 pkg_postinst() {
 	if use python; then
-		    python_need_rebuild
-		    python_mod_optimize $(python_get_sitedir)/${PN}.py \
-			    $(python_get_sitedir)/ogr.py
+		python_need_rebuild
+		python_mod_optimize ${PN}.py ogr.py
 	fi
 	echo
 	elog "Check available image and data formats after building with"
 	elog "gdalinfo and ogrinfo (using the --formats switch)."
+}
+
+pkg_postrm() {
+	if use python; then
+		python_mod_cleanup ${PN}.py ogr.py
+	fi
 }
