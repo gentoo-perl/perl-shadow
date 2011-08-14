@@ -1,6 +1,11 @@
 # ChangeLog for app-misc/note
-# Copyright 2000-2008 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/note/ChangeLog,v 1.24 2008/07/31 16:45:08 ulm Exp $
+
+*note-1.3.6 (14 Aug 2011)
+
+  14 Aug 2011; Kent Fredric <kentfredric@gmail.com> +note-1.3.6.ebuild:
+  Bumped to 1.3.6 now available from CPAN
 
   31 Jul 2008; Ulrich Mueller <ulm@gentoo.org> metadata.xml:
   Add USE flag description to metadata wrt GLEP 56.
