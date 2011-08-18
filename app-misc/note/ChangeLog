@@ -2,6 +2,10 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: /var/cvsroot/gentoo-x86/app-misc/note/ChangeLog,v 1.24 2008/07/31 16:45:08 ulm Exp $
 
+  14 Aug 2011; Kent Fredric <kentfredric@gmail.com> note-1.3.6.ebuild:
+  Cleaned up some nasty code, SRC_TEST="skip" instead of RESTRICT, and no more
+  pruning of .pm files. USE flags only control dependencies.
+
 *note-1.3.6 (14 Aug 2011)
 
   14 Aug 2011; Kent Fredric <kentfredric@gmail.com> +note-1.3.6.ebuild:
