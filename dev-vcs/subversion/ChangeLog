@@ -1,6 +1,36 @@
 # ChangeLog for dev-vcs/subversion
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/subversion/ChangeLog,v 1.40 2011/03/06 11:48:14 hwoarang Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/subversion/ChangeLog,v 1.45 2011/08/18 16:48:11 phajdan.jr Exp $
+
+  18 Aug 2011; Pawel Hajdan jr <phajdan.jr@gentoo.org>
+  subversion-1.6.17.ebuild:
+  x86 stable wrt security bug #369065
+
+*subversion-1.6.17-r1 (18 Aug 2011)
+
+  18 Aug 2011; Tony Vroon <chainsaw@gentoo.org> +files/47_mod_dav_svn.conf,
+  +files/80subversion-extras, +subversion-1.6.17-r1.ebuild,
+  +files/svnserve.initd2:
+  Cut down extraneous einfo as requested by Gokdeniz Karadag in bug #268633.
+  Removed USE=threadsafe requirement for sqlite as per Alan Hourihane in bug
+  #323951. Stop use of --chuid in init script as per Michael Mair-Keimberger in
+  bug #377781. Removed overengineered testing facilities; unmaintainable in
+  current state. Moved remaining inline configuration files to FILESDIR.
+  Removed custom inline print function.
+
+  18 Aug 2011; Kacper Kowalik <xarthisius@gentoo.org> subversion-1.6.17.ebuild:
+  ppc/ppc64 stable wrt #69065
+
+  17 Aug 2011; Markos Chandras <hwoarang@gentoo.org> subversion-1.6.17.ebuild:
+  Stable on amd64 wrt bug #369065
+
+*subversion-1.6.17 (17 Aug 2011)
+
+  17 Aug 2011; Tony Vroon <chainsaw@gentoo.org> +subversion-1.6.17.ebuild,
+  metadata.xml:
+  Version bump for security bug #369065 by Tim Sammut. Took maintainership,
+  added use of base eclass and PATCHES bash array. EAPI 4 usage made impossible
+  by python eclass.
 
   06 Mar 2011; Markos Chandras <hwoarang@gentoo.org> subversion-1.6.16.ebuild:
   Stable on amd64 wrt bug #356741
