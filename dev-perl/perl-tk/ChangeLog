@@ -1,6 +1,16 @@
 # ChangeLog for dev-perl/perl-tk
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/perl-tk/ChangeLog,v 1.79 2010/11/27 07:23:49 tove Exp $
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/perl-tk/ChangeLog,v 1.81 2011/08/30 09:26:55 lxnay Exp $
+
+  30 Aug 2011; Fabio Erculiani <lxnay@gentoo.org> perl-tk-804.029.ebuild,
+  perl-tk-804.29.0.ebuild:
+  ouch, no RDEPEND set and EAPI=3 is quite wrong, this triggers several missing
+  runtime dependencies and broken binpkgs support
+
+*perl-tk-804.29.0 (27 Aug 2011)
+
+  27 Aug 2011; Torsten Veller <tove@gentoo.org> +perl-tk-804.29.0.ebuild:
+  Change version scheme
 
   27 Nov 2010; Torsten Veller <tove@gentoo.org> -files/804.028-FBox.patch,
   -files/804.028-MouseWheel.patch, -perl-tk-804.028-r2.ebuild,

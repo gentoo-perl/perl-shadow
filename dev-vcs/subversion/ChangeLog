@@ -1,6 +1,86 @@
 # ChangeLog for dev-vcs/subversion
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/subversion/ChangeLog,v 1.45 2011/08/18 16:48:11 phajdan.jr Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/subversion/ChangeLog,v 1.58 2011/09/02 15:46:00 chainsaw Exp $
+
+*subversion-1.6.17-r7 (02 Sep 2011)
+
+  02 Sep 2011; Tony Vroon <chainsaw@gentoo.org> +subversion-1.6.17-r7.ebuild:
+  Remove apache2-related explanation as it looks out of place, as per Martin
+  von Gagern in bug #381259. dodoc -r is an EAPI 4 feature that can not be used
+  for eclass reasons, do better. As per Ulrich "ulm" Müller in bug #381577.
+
+  01 Sep 2011; Tony Vroon <chainsaw@gentoo.org> -subversion-1.6.15.ebuild,
+  -subversion-1.6.16.ebuild, -subversion-1.6.17-r4.ebuild,
+  -subversion-1.6.17-r5.ebuild:
+  Remove old ebuilds. 1.6.17-r6 is the new stabilisation target in one month.
+
+*subversion-1.6.17-r6 (31 Aug 2011)
+
+  31 Aug 2011; Jeremy Olexa <darkside@gentoo.org>
+  +files/subversion-1.5.4-interix.patch, +files/subversion-1.5.6-aix-dso.patch,
+  +files/subversion-1.6.3-hpux-dso.patch, +subversion-1.6.17-r6.ebuild:
+  Revision bump to finish Gentoo Prefix support, signed off by maintainer in
+  bug 329505
+
+*subversion-1.6.17-r5 (30 Aug 2011)
+
+  30 Aug 2011; Tony Vroon <chainsaw@gentoo.org> -subversion-1.6.17-r3.ebuild,
+  +subversion-1.6.17-r5.ebuild:
+  Stop static libraries from being built entirely, instead of deleting them
+  after the fact as suggested by Rafał "galtgendo" Mużyło in bug #380891.
+  Removed old ebuild.
+
+  27 Aug 2011; Raúl Porcel <armin76@gentoo.org> subversion-1.6.17.ebuild:
+  alpha/ia64/s390/sh/sparc stable wrt #369065
+
+  26 Aug 2011; Jeremy Olexa <darkside@gentoo.org> subversion-1.6.17-r4.ebuild:
+  Fix a few items wrt Gentoo Prefix support, signed off by maintainer
+
+  25 Aug 2011; Jeroen Roovers <jer@gentoo.org> subversion-1.6.17.ebuild:
+  Stable for HPPA (bug #369065).
+
+  24 Aug 2011; Markus Meier <maekke@gentoo.org> subversion-1.6.17.ebuild:
+  arm stable, bug #369065
+
+  23 Aug 2011; Lars Wendler <polynomial-c@gentoo.org>
+  subversion-1.6.17-r3.ebuild, subversion-1.6.17-r4.ebuild:
+  Added minimal necessary sys-libs/db version again with kind permission from
+  chainsaw.
+
+  23 Aug 2011; Lars Wendler <polynomial-c@gentoo.org>
+  subversion-1.6.17-r4.ebuild:
+  Removed version restriction on sys-libs/db with kind permission from
+  chainsaw.
+
+*subversion-1.6.17-r4 (22 Aug 2011)
+
+  22 Aug 2011; Tony Vroon <chainsaw@gentoo.org> -subversion-1.6.17-r2.ebuild,
+  +subversion-1.6.17-r4.ebuild:
+  Automatically match DBD version to what libapr was built with; idea & code by
+  Martin von Gagern in bug #291624. Removed -j1 from where it does not seem to
+  be required. Tested on a dual hex-core system with -j12; please file a bug if
+  you can make it fail. Removed old ebuild.
+
+*subversion-1.6.17-r3 (22 Aug 2011)
+
+  22 Aug 2011; Tony Vroon <chainsaw@gentoo.org> +subversion-1.6.17-r3.ebuild:
+  As per discussion with Diego Elio "Flameeyes" Pettenò, it is inconceivable
+  that one would statically link against subversion. As such, instead of adding
+  USE=static-libs, .a & .la files are no longer installed. Closes bug #378277
+  by Agostino "ago" Sarubbo.
+
+*subversion-1.6.17-r2 (19 Aug 2011)
+
+  19 Aug 2011; Tony Vroon <chainsaw@gentoo.org> -files/80subversion-extras,
+  -subversion-1.6.17-r1.ebuild, +subversion-1.6.17-r2.ebuild:
+  More gracefully handle dependency between KDE & NLS USE-flags, as requested
+  by Jeroen Roovers in bug #330941. Perfection would require EAPI=4, which I
+  can not use yet. Tell user to restart daemon after upgrade, as requested by
+  Joel Koglin in bug #337042. Use recursive dodoc instead of ecompressdir as
+  requested by Ulrich Müller in bug #356503. Move the environment config back
+  to inline for now, as Kent Fredric reports that variable substitution broke
+  and caused env-update failures. Closes bug #379819. Killed old -r1 ebuild due
+  to this problem.
 
   18 Aug 2011; Pawel Hajdan jr <phajdan.jr@gentoo.org>
   subversion-1.6.17.ebuild:
