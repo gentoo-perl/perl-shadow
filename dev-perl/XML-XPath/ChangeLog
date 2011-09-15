@@ -1,6 +1,12 @@
 # ChangeLog for dev-perl/XML-XPath
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/XML-XPath/ChangeLog,v 1.33 2011/08/27 20:54:54 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/XML-XPath/ChangeLog,v 1.35 2011/09/04 11:23:09 tove Exp $
+
+  04 Sep 2011; Torsten Veller <tove@gentoo.org> -XML-XPath-1.13.ebuild:
+  Cleanup
+
+  03 Sep 2011; Torsten Veller <tove@gentoo.org> XML-XPath-1.130.0.ebuild:
+  Merge stable keywords from former version scheme ebuild
 
 *XML-XPath-1.130.0 (27 Aug 2011)
 
