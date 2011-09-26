@@ -11,6 +11,16 @@ listdir=$updaterdir/lists
 
 RSYNC='rsync -avp --delete-delay'
 
+catlist() {
+  echo dev-perl
+  echo perl-core
+  echo virtual
+  for listcat in $listdir/*.list; do
+    srcfile=$(basename $listcat);
+    category=${srcfile/.list};
+    echo $category;
+  done
+}
 
 einfo() {
   echo -ne "\e[1;32m [info]\e[0;32m ";
@@ -37,13 +47,14 @@ for listcat in $listdir/*.list ; do
 done
 
 einfo "Regenerating Categories list"
-cat <(
-  echo 'dev-perl';
-  echo 'perl-core';
-  echo 'virtual';
-  for listcat in $listdir/*.list; do
-    srcfile=$(basename $listcat);
-    category=${srcfile/.list};
-    echo $category;
-  done
-) | sort -u >| $dest/profiles/categories
+catlist | sort -u >| $dest/profiles/categories
+
+einfo "Updating Git"
+pushd $dest;
+for i in $( catlist ); do
+  git add -u $i;
+  git add $i;
+done
+ts="$(cat /usr/portage/metadata/timestamp.chk)"
+git commit -m "Sync with gentoo: $ts"
+popd;
