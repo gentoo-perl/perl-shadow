@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/subversion/subversion-1.6.17-r7.ebuild,v 1.2 2011/10/12 22:24:27 chainsaw Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/subversion/subversion-1.7.0.ebuild,v 1.1 2011/10/12 19:21:54 chainsaw Exp $
 
 EAPI="3"
 SUPPORT_PYTHON_ABIS="1"
@@ -12,13 +12,13 @@ inherit autotools base bash-completion db-use depend.apache elisp-common flag-o-
 
 DESCRIPTION="Advanced version control system"
 HOMEPAGE="http://subversion.apache.org/"
-SRC_URI="http://subversion.tigris.org/downloads/${MY_P}.tar.bz2"
+SRC_URI="http://www.apache.org/dist/${PN}/${MY_P}.tar.bz2"
 S="${WORKDIR}/${MY_P}"
 
 LICENSE="Subversion"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="apache2 berkdb ctypes-python debug doc +dso emacs extras gnome-keyring java kde nls perl python ruby sasl vim-syntax +webdav-neon webdav-serf"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~x86-fbsd ~x86-freebsd ~hppa-hpux ~ia64-hpux ~x86-interix ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~m68k-mint ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+IUSE="apache2 berkdb ctypes-python debug doc +dso extras gnome-keyring java kde nls perl python ruby sasl vim-syntax +webdav-neon webdav-serf"
 
 CDEPEND=">=dev-db/sqlite-3.4
 	>=dev-libs/apr-1.3:1
@@ -27,7 +27,6 @@ CDEPEND=">=dev-db/sqlite-3.4
 	sys-libs/zlib
 	berkdb? ( >=sys-libs/db-4.0.14 )
 	ctypes-python? ( =dev-lang/python-2* )
-	emacs? ( virtual/emacs )
 	gnome-keyring? ( dev-libs/glib:2 sys-apps/dbus gnome-base/gnome-keyring )
 	kde? ( sys-apps/dbus x11-libs/qt-core x11-libs/qt-dbus x11-libs/qt-gui >=kde-base/kdelibs-4 )
 	perl? ( dev-lang/perl )
@@ -53,9 +52,6 @@ DEPEND="${CDEPEND}
 	webdav-neon? ( dev-util/pkgconfig )"
 
 PATCHES=(
-		"${FILESDIR}/${PN}-1.6.0-disable_linking_against_unneeded_libraries.patch"
-		"${FILESDIR}/${PN}-1.6.2-local_library_preloading.patch"
-		"${FILESDIR}/${PN}-1.6.3-kwallet_window.patch"
 		"${FILESDIR}/${PN}-1.5.4-interix.patch"
 		"${FILESDIR}/${PN}-1.5.6-aix-dso.patch"
 		"${FILESDIR}/${PN}-1.6.3-hpux-dso.patch"
@@ -240,12 +236,7 @@ src_compile() {
 		emake -j1 JAVAC_FLAGS="$(java-pkg_javac-args) -encoding iso8859-1" javahl || die "Building of Subversion JavaHL library failed"
 	fi
 
-	if use emacs; then
-		elisp-compile contrib/client-side/emacs/{dsvn,psvn,vc-svn}.el doc/svn-doc.el doc/tools/svnbook.el || die "Compilation of Emacs modules failed"
-	fi
-
 	if use extras; then
-		emake contrib || die "Building of contrib failed"
 		emake tools || die "Building of tools failed"
 	fi
 
@@ -326,12 +317,6 @@ src_install() {
 	newbin tools/backup/hot-backup.py svn-hot-backup
 	rm -fr tools/backup
 
-	# Install svn_load_dirs.pl.
-	if use perl; then
-		dobin contrib/client-side/svn_load_dirs/svn_load_dirs.pl
-	fi
-	rm -f contrib/client-side/svn_load_dirs/svn_load_dirs.pl
-
 	# Install svnserve init-script and xinet.d snippet, bug 43245.
 	newinitd "${FILESDIR}"/svnserve.initd2 svnserve
 	newconfd "${FILESDIR}"/svnserve.confd svnserve
@@ -343,22 +328,6 @@ src_install() {
 	dodoc tools/xslt/svnindex.{css,xsl}
 	rm -fr tools/xslt
 
-	# Install Vim syntax files.
-	if use vim-syntax; then
-		insinto /usr/share/vim/vimfiles/syntax
-		doins contrib/client-side/vim/svn.vim
-	fi
-	rm -f contrib/client-side/vim/svn.vim
-
-	# Install Emacs Lisps.
-	if use emacs; then
-		elisp-install ${PN} contrib/client-side/emacs/{dsvn,psvn}.{el,elc} doc/svn-doc.{el,elc} doc/tools/svnbook.{el,elc} || die "Installation of Emacs modules failed"
-		elisp-install ${PN}/compat contrib/client-side/emacs/vc-svn.{el,elc} || die "Installation of Emacs modules failed"
-		touch "${ED}${SITELISP}/${PN}/compat/.nosearch"
-		elisp-site-file-install "${FILESDIR}/70svn-gentoo.el" || die "Installation of Emacs site-init file failed"
-	fi
-	rm -fr contrib/client-side/emacs
-
 	# Install extra files.
 	if use extras; then
 		cat << EOF > 80subversion-extras
@@ -367,18 +336,15 @@ ROOTPATH="${EPREFIX}/usr/$(get_libdir)/subversion/bin"
 EOF
 		doenvd 80subversion-extras
 
-		emake DESTDIR="${D}" contribdir="/usr/$(get_libdir)/subversion/bin" install-contrib || die "Installation of contrib failed"
 		emake DESTDIR="${D}" toolsdir="/usr/$(get_libdir)/subversion/bin" install-tools || die "Installation of tools failed"
 
-		find contrib tools "(" -name "*.bat" -o -name "*.in" -o -name ".libs" ")" -print0 | xargs -0 rm -fr
-		rm -fr contrib/client-side/svn-push
-		rm -fr contrib/server-side/svnstsw
+		find tools "(" -name "*.bat" -o -name "*.in" -o -name ".libs" ")" -print0 | xargs -0 rm -fr
 		rm -fr tools/client-side/svnmucc
 		rm -fr tools/server-side/{svn-populate-node-origins-index,svnauthz-validate}*
 		rm -fr tools/{buildbot,dev,diff,po}
 
 		insinto /usr/share/${PN}
-		doins -r contrib tools
+		doins -r tools
 	fi
 
 	if use doc; then
@@ -406,7 +372,6 @@ pkg_preinst() {
 }
 
 pkg_postinst() {
-	use emacs && elisp-site-regen
 	use perl && perl-module_pkg_postinst
 
 	if use ctypes-python; then
@@ -428,7 +393,6 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
-	use emacs && elisp-site-regen
 	use perl && perl-module_pkg_postrm
 
 	if use ctypes-python; then
