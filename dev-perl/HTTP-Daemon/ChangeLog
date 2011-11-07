@@ -1,6 +1,16 @@
 # ChangeLog for dev-perl/HTTP-Daemon
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/HTTP-Daemon/ChangeLog,v 1.9 2011/11/06 13:10:17 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/HTTP-Daemon/ChangeLog,v 1.12 2011/11/07 13:06:18 jer Exp $
+
+  07 Nov 2011; Jeroen Roovers <jer@gentoo.org> HTTP-Daemon-6.0.0.ebuild:
+  Stable for HPPA (bug #386309).
+
+  06 Nov 2011; Markus Meier <maekke@gentoo.org> HTTP-Daemon-6.0.0.ebuild:
+  arm stable, bug #386309
+
+  06 Nov 2011; Andreas Schuerch <nativemad@gentoo.org>
+  HTTP-Daemon-6.0.0.ebuild:
+  x86 stable, bug 386309. Thanks Myckel Habets.
 
   06 Nov 2011; Brent Baude <ranger@gentoo.org> HTTP-Daemon-6.0.0.ebuild:
   Marking HTTP-Daemon-6.0.0 ppc stable for bug 386309
