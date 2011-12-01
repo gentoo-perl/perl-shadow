@@ -28,6 +28,10 @@ einfo() {
   echo -ne "\e[0m";
   echo
 }
+die() {
+  einfo $@;
+  exit 255;
+}
 
 einfo "Builiding $dest from $src";
 einfo "all: dev-perl";
@@ -51,6 +55,7 @@ catlist | sort -u >| $dest/profiles/categories
 
 einfo "Updating Git"
 pushd $dest;
+git checkout master || die "Fark, can't update";
 for i in $( catlist ); do
   git add -u $i;
   git add $i;
