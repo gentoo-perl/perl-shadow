@@ -1,11 +1,11 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/PAR/PAR-1.3.0.ebuild,v 1.1 2011/11/30 19:08:46 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/PAR/PAR-1.5.0.ebuild,v 1.1 2011/12/05 15:49:30 tove Exp $
 
 EAPI=4
 
 MODULE_AUTHOR=RSCHUPP
-MODULE_VERSION=1.003
+MODULE_VERSION=1.005
 inherit perl-module
 
 DESCRIPTION="Perl Archive Toolkit"
