@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-1.1.12.ebuild,v 1.1 2011/12/27 07:40:00 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-1.1.12-r1.ebuild,v 1.1 2011/12/28 05:49:12 patrick Exp $
 
 EAPI="4"
 
@@ -81,7 +81,7 @@ NGINX_MODULES_3RD="
 	http_upload
 	http_slowfs_cache"
 
-IUSE="aio debug +http +http-cache ipv6 libatomic +pcre ssl vim-syntax"
+IUSE="aio debug +http +http-cache ipv6 libatomic +pcre pcre-jit ssl vim-syntax"
 
 for mod in $NGINX_MODULES_STD; do
 	IUSE="${IUSE} +nginx_modules_http_${mod}"
@@ -116,6 +116,7 @@ DEPEND="${CDEPEND}
 	arm? ( dev-libs/libatomic_ops )
 	libatomic? ( dev-libs/libatomic_ops )"
 PDEPEND="vim-syntax? ( app-vim/nginx-syntax )"
+REQUIRED_USE="pcre-jit? ( pcre )"
 
 pkg_setup() {
 	if use nginx_modules_http_passenger; then
@@ -172,6 +173,7 @@ src_configure() {
 	use ipv6      && myconf+=" --with-ipv6"
 	use libatomic && myconf+=" --with-libatomic"
 	use pcre      && myconf+=" --with-pcre"
+	use pcre-jit  && myconf+=" --with-pcre-jit"
 
 	# HTTP modules
 	for mod in $NGINX_MODULES_STD; do
