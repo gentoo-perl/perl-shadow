@@ -1,11 +1,11 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/HTTP-BrowserDetect/HTTP-BrowserDetect-1.400.0.ebuild,v 1.1 2012/01/08 19:40:53 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/HTTP-BrowserDetect/HTTP-BrowserDetect-1.410.0.ebuild,v 1.1 2012/01/11 13:25:26 tove Exp $
 
 EAPI=4
 
 MODULE_AUTHOR=OALDERS
-MODULE_VERSION=1.40
+MODULE_VERSION=1.41
 inherit perl-module
 
 DESCRIPTION="Detect browser, version, OS from UserAgent"
