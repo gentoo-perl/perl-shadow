@@ -1,6 +1,31 @@
 # ChangeLog for net-print/cups
-# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.437 2011/11/13 11:36:59 jlec Exp $
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.441 2012/01/15 22:41:37 dilfridge Exp $
+
+  15 Jan 2012; Andreas K. Huettel <dilfridge@gentoo.org> cups-1.4.8-r1.ebuild,
+  cups-1.4.8-r23.ebuild, cups-1.5.0-r3.ebuild, metadata.xml:
+  Pull in net-print/foomatic-filters via a default-on useflag, bug 384793
+
+  15 Jan 2012; Andreas K. Huettel <dilfridge@gentoo.org> cups-1.4.8-r23.ebuild,
+  cups-1.5.0-r3.ebuild, files/cupsd.init.d:
+  Create dirs in /var/run in initscript, bug 387893
+
+*cups-1.5.0-r3 (15 Jan 2012)
+*cups-1.4.8-r23 (15 Jan 2012)
+
+  15 Jan 2012; Andreas K. Huettel <dilfridge@gentoo.org>
+  +cups-1.4.8-r23.ebuild, +cups-1.5.0-r3.ebuild:
+  Update icon cache etc, bug 370059
+
+  15 Jan 2012; Andreas K. Huettel <dilfridge@gentoo.org>
+  -files/cups-1.3.0-configure.patch, -files/cups-1.3.7-backend-https.patch,
+  -files/cups-1.3.10-str3178.patch, -cups-1.3.11-r4.ebuild,
+  -files/cups-1.3.11-pdf-m4.patch, -files/cups-1.3.11-str3200.patch,
+  -files/cups-1.3.11-str3367-security-1.3v2.patch,
+  -files/cups-1.3.11-str3401-security-1.3v2-regression.patch,
+  -cups-1.4.6-r2.ebuild, -files/cups-1.4.6-web-hang.patch,
+  -cups-1.4.8-r21.ebuild, -cups-1.5.0-r1.ebuild:
+  Remove old
 
   13 Nov 2011; Justin Lecher <jlec@gentoo.org> cups-1.3.11-r4.ebuild,
   cups-1.4.6-r2.ebuild, cups-1.4.8-r1.ebuild, cups-1.4.8-r21.ebuild,

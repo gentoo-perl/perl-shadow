@@ -1,29 +1,23 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.5.0-r1.ebuild,v 1.3 2011/11/13 11:36:59 jlec Exp $
-
-#
-# See http://git.overlays.gentoo.org/gitweb/?p=dev/dilfridge.git;a=blob;f=net-print/cups/notes.txt;hb=HEAD
-# for some notes about the ongoing work here
-#
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.4.8-r23.ebuild,v 1.3 2012/01/15 22:41:37 dilfridge Exp $
 
 EAPI=3
 
 PYTHON_DEPEND="python? 2:2.5"
 
-inherit autotools eutils flag-o-matic linux-info multilib pam perl-module python versionator java-pkg-opt-2
+inherit autotools eutils fdo-mime gnome2-utils flag-o-matic linux-info multilib pam perl-module python versionator java-pkg-opt-2
 
 MY_P=${P/_}
-MY_PV=${PV/_}
 
 DESCRIPTION="The Common Unix Printing System"
 HOMEPAGE="http://www.cups.org/"
-SRC_URI="mirror://easysw/${PN}/${MY_PV}/${MY_P}-source.tar.bz2"
+SRC_URI="mirror://easysw/${PN}/${PV}/${MY_P}-source.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="acl dbus debug gnutls java +jpeg kerberos ldap pam perl php +png python samba slp +ssl static-libs +threads +tiff usb X xinetd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~sparc-fbsd ~x86 ~x86-fbsd"
+IUSE="acl dbus debug +filters gnutls java +jpeg kerberos ldap pam perl php +png python samba slp +ssl static-libs +threads +tiff usb X xinetd"
 
 LANGS="da de es eu fi fr id it ja ko nl no pl pt pt_BR ru sv zh zh_TW"
 for X in ${LANGS} ; do
@@ -39,6 +33,7 @@ RDEPEND="
 		)
 	)
 	dbus? ( sys-apps/dbus )
+	filters? ( net-print/foomatic-filters )
 	java? ( >=virtual/jre-1.6 )
 	jpeg? ( virtual/jpeg:0 )
 	kerberos? ( virtual/krb5 )
@@ -51,7 +46,7 @@ RDEPEND="
 	ssl? (
 		gnutls? (
 			dev-libs/libgcrypt
-			>=net-libs/gnutls-2.11
+			net-libs/gnutls
 		)
 		!gnutls? ( >=dev-libs/openssl-0.9.8g )
 	)
@@ -134,12 +129,17 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# create a missing symlink to allow https printing via IPP, bug #217293
+	epatch "${FILESDIR}/${PN}-1.4.0-backend-https.patch"
 	# various build time fixes
 	epatch "${FILESDIR}/${PN}-1.4.4-dont-compress-manpages.patch"
 	epatch "${FILESDIR}/${PN}-1.4.4-fix-install-perms.patch"
 	epatch "${FILESDIR}/${PN}-1.4.4-nostrip.patch"
 	epatch "${FILESDIR}/${PN}-1.4.4-php-destdir.patch"
 	epatch "${FILESDIR}/${PN}-1.4.4-perl-includes.patch"
+	epatch "${FILESDIR}/${PN}-1.4.6-force-gnutls.patch"
+	epatch "${FILESDIR}/${PN}-1.4.6-serialize-gnutls.patch"
+	epatch "${FILESDIR}/${PN}-1.4.8-largeimage.patch"
 	# security fixes
 	epatch "${FILESDIR}/${PN}-1.4.8-CVE-2011-3170.patch"
 
@@ -278,7 +278,7 @@ src_install() {
 	fi
 
 	keepdir /usr/libexec/cups/driver /usr/share/cups/{model,profiles} \
-		/var/cache/cups /var/cache/cups/rss /var/log/cups /var/run/cups/certs \
+		/var/cache/cups /var/cache/cups/rss /var/log/cups \
 		/var/spool/cups/tmp
 
 	keepdir /etc/cups/{interfaces,ppd,ssl}
@@ -289,9 +289,23 @@ src_install() {
 	echo "ServerName /var/run/cups/cups.sock" >> "${D}"/etc/cups/client.conf
 }
 
+pkg_preinst() {
+	gnome2_icon_savelist
+}
+
 pkg_postinst() {
+	# Update desktop file database and gtk icon cache (bug 370059)
+	gnome2_icon_cache_update
+	fdo-mime_desktop_database_update
+
 	echo
 	elog "For information about installing a printer and general cups setup"
 	elog "take a look at: http://www.gentoo.org/doc/en/printing-howto.xml"
 	echo
+}
+
+pkg_postrm() {
+	# Update desktop file database and gtk icon cache (bug 370059)
+	gnome2_icon_cache_update
+	fdo-mime_desktop_database_update
 }
