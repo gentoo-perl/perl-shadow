@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/foomatic-db-engine/foomatic-db-engine-4.0.7.ebuild,v 1.2 2012/01/17 22:41:02 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/foomatic-db-engine/foomatic-db-engine-4.0.8.ebuild,v 1.1 2012/01/17 13:34:45 jlec Exp $
 
 EAPI="2"
 
@@ -8,11 +8,11 @@ inherit eutils perl-app versionator
 
 DESCRIPTION="Generates ppds out of xml foomatic printer description files"
 HOMEPAGE="http://www.linuxprinting.org/foomatic.html"
-SRC_URI="http://www.linuxprinting.org/download/foomatic/${P}.tar.gz"
+SRC_URI="http://www.openprinting.org/download/foomatic/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE=""
 
 RDEPEND="
@@ -22,8 +22,8 @@ PDEPEND="net-print/foomatic-db"
 
 src_prepare() {
 	epatch \
-		"${FILESDIR}"/${PV}-perl-module.patch \
-		"${FILESDIR}"/${PV}-respect-ldflag.patch
+		"${FILESDIR}"/4.0.7-perl-module.patch \
+		"${FILESDIR}"/4.0.7-respect-ldflag.patch
 	sed -i -e "s:@LIB_CUPS@:$(cups-config --serverbin):" "${S}"/Makefile.in
 }
 
