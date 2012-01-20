@@ -1,8 +1,8 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/git-1.7.5_rc3.ebuild,v 1.3 2011/08/19 18:43:47 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/git-1.7.9_rc2.ebuild,v 1.1 2012/01/20 08:27:19 robbat2 Exp $
 
-EAPI=3
+EAPI=4
 
 GENTOO_DEPEND_ON_PERL=no
 
@@ -11,7 +11,7 @@ PYTHON_DEPEND="python? 2"
 [[ ${PV} == *9999 ]] && SCM="git-2"
 EGIT_REPO_URI="git://git.kernel.org/pub/scm/git/git.git"
 
-inherit toolchain-funcs eutils elisp-common perl-module bash-completion python ${SCM}
+inherit toolchain-funcs eutils elisp-common perl-module bash-completion-r1 python ${SCM}
 
 MY_PV="${PV/_rc/.rc}"
 MY_P="${PN}-${MY_PV}"
@@ -21,10 +21,19 @@ DOC_VER=${MY_PV}
 DESCRIPTION="GIT - the stupid content tracker, the revision control system heavily used by the Linux kernel team"
 HOMEPAGE="http://www.git-scm.com/"
 if [[ ${PV} != *9999 ]]; then
-	SRC_URI="mirror://kernel/software/scm/git/${MY_P}.tar.bz2
-			mirror://kernel/software/scm/git/${PN}-manpages-${DOC_VER}.tar.bz2
-			doc? ( mirror://kernel/software/scm/git/${PN}-htmldocs-${DOC_VER}.tar.bz2 )"
+	SRC_URI_SUFFIX="gz"
+	SRC_URI_GOOG="http://git-core.googlecode.com/files"
+	SRC_URI_KORG="mirror://kernel/software/scm/git"
+	SRC_URI="${SRC_URI_GOOG}/${MY_P}.tar.${SRC_URI_SUFFIX}
+			${SRC_URI_KORG}/${MY_P}.tar.${SRC_URI_SUFFIX}
+			${SRC_URI_GOOG}/${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}
+			${SRC_URI_KORG}/${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}
+			doc? (
+			${SRC_URI_KORG}/${PN}-htmldocs-${DOC_VER}.tar.${SRC_URI_SUFFIX}
+			${SRC_URI_GOOG}/${PN}-htmldocs-${DOC_VER}.tar.${SRC_URI_SUFFIX}
+			)"
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-aix ~sparc-fbsd ~x86-fbsd ~x64-freebsd ~x86-freebsd ~ia64-hpux ~x86-interix ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+	KEYWORDS="" # Pending git-svn fixes
 else
 	SRC_URI=""
 	KEYWORDS=""
@@ -38,7 +47,7 @@ IUSE="+blksha1 +curl cgi doc emacs gtk iconv +perl +python ppcsha1 tk +threads +
 CDEPEND="
 	!blksha1? ( dev-libs/openssl )
 	sys-libs/zlib
-	perl?   ( dev-lang/perl[-build] )
+	perl?   ( dev-lang/perl[-build] dev-libs/libpcre )
 	tk?     ( dev-lang/tk )
 	curl?   (
 		net-misc/curl
@@ -47,6 +56,7 @@ CDEPEND="
 	emacs?  ( virtual/emacs )"
 
 RDEPEND="${CDEPEND}
+	app-crypt/gnupg
 	perl? ( dev-perl/Error
 			dev-perl/Net-SMTP-SSL
 			dev-perl/Authen-SASL
@@ -66,10 +76,13 @@ RDEPEND="${CDEPEND}
 #   .texi         --(makeinfo)---------> .info
 DEPEND="${CDEPEND}
 	app-arch/cpio
-	doc?    (
+	doc? (
 		app-text/asciidoc
 		app-text/docbook2X
 		sys-apps/texinfo
+	)
+	test? (
+		app-crypt/gnupg
 	)"
 
 # Live ebuild builds man pages and HTML docs, additionally
@@ -82,15 +95,14 @@ fi
 SITEFILE=50${PN}-gentoo.el
 S="${WORKDIR}/${MY_P}"
 
+REQUIRED_USE="
+	cgi? ( perl )
+	cvs? ( perl )
+	subversion? ( perl )
+	webdav? ( curl )
+"
+
 pkg_setup() {
-	if ! use perl ; then
-		use cgi && ewarn "gitweb needs USE=perl, ignoring USE=cgi"
-		use cvs && ewarn "CVS integration needs USE=perl, ignoring USE=cvs"
-		use subversion && ewarn "git-svn needs USE=perl, it won't work"
-	fi
-	if use webdav && ! use curl ; then
-		ewarn "USE=webdav needs USE=curl. Ignoring"
-	fi
 	if use subversion && has_version dev-vcs/subversion && built_with_use --missing false dev-vcs/subversion dso ; then
 		ewarn "Per Gentoo bugs #223747, #238586, when subversion is built"
 		ewarn "with USE=dso, there may be weird crashes in git-svn. You"
@@ -139,7 +151,7 @@ exportmakeopts() {
 	use tk \
 		|| myopts="${myopts} NO_TCLTK=YesPlease"
 	use perl \
-		&& myopts="${myopts} INSTALLDIRS=vendor" \
+		&& myopts="${myopts} INSTALLDIRS=vendor USE_LIBPCRE=yes" \
 		|| myopts="${myopts} NO_PERL=YesPlease"
 	use python \
 		|| myopts="${myopts} NO_PYTHON=YesPlease"
@@ -179,12 +191,12 @@ exportmakeopts() {
 
 src_unpack() {
 	if [[ ${PV} != *9999 ]]; then
-		unpack ${MY_P}.tar.bz2
+		unpack ${MY_P}.tar.${SRC_URI_SUFFIX}
 		cd "${S}"
-		unpack ${PN}-manpages-${DOC_VER}.tar.bz2
+		unpack ${PN}-manpages-${DOC_VER}.tar.${SRC_URI_SUFFIX}
 		use doc && \
 			cd "${S}"/Documentation && \
-			unpack ${PN}-htmldocs-${DOC_VER}.tar.bz2
+			unpack ${PN}-htmldocs-${DOC_VER}.tar.${SRC_URI_SUFFIX}
 		cd "${S}"
 	else
 		git-2_src_unpack
@@ -203,7 +215,8 @@ src_prepare() {
 	#epatch "${FILESDIR}"/20090505-git-1.6.2.5-getopt-fixes.patch
 
 	# JS install fixup
-	epatch "${FILESDIR}"/git-1.7.2-always-install-js.patch
+	# Merged in 1.7.5.x
+	#epatch "${FILESDIR}"/git-1.7.2-always-install-js.patch
 
 	# USE=-iconv causes segfaults, fixed post 1.7.1
 	# Gentoo bug #321895
@@ -242,6 +255,32 @@ src_prepare() {
 	# bug #318289
 	# Merged upstream
 	#epatch "${FILESDIR}"/git-1.7.3.2-interix.patch
+
+	# merged upstream
+	#epatch "${FILESDIR}"/git-1.7.5-interix.patch
+
+	# merged upstream
+	#epatch "${FILESDIR}"/git-1.7.6-interix.patch
+
+	# Newer versions of SVN hate a whitespace in the file URL. 
+	# So we avoid that by replaced the space with an underscore.
+	#Initialized empty Git repository in /dev/shm/portage/dev-vcs/git-9999/work/git-9999/t/t d.t9155/git_project/.git/
+	#svn: E235000: In file 'subversion/libsvn_subr/dirent_uri.c' line 2291: assertion failed (svn_uri_is_canonical(url, pool))
+	# 
+	# With this change the following tests still fail: t9100 t9118 t9120
+	# Without it, MOST of t91* fails, due to the space tripping up the
+	# svn_uri_is_canonical.
+    #
+	# git-svn actually needs to be fixed here, but this chagne is useful for
+	# testing it.
+	#
+	# This patch is my work to date on fixing git-svn, but it causes more
+	# breakage than it fixes (it's manually-edited now to do nothing).
+	#epatch "${FILESDIR}"/git-1.7.8-git-svn-1.7-canonical-path.patch
+	cd "${S}"/t
+	sed -i \
+		-e 's/trash directory/trash_directory/g' \
+		test-lib.sh t0000-basic.sh Makefile || die "sed failed"
 }
 
 git_emake() {
@@ -259,10 +298,12 @@ git_emake() {
 		htmldir="${EPREFIX}"/usr/share/doc/${PF}/html \
 		sysconfdir="${EPREFIX}"/etc \
 		PYTHON_PATH="${PYTHON_PATH}" \
-		PERL_PATH="${EPREFIX}/usr/bin/env perl" \
 		PERL_MM_OPT="" \
 		GIT_TEST_OPTS="--no-color" \
 		"$@"
+	# This is the fix for bug #326625, but it also causes breakage, see bug
+	# #352693.
+	# PERL_PATH="${EPREFIX}/usr/bin/env perl" \
 }
 
 src_configure() {
@@ -320,7 +361,7 @@ src_install() {
 	# Upstream does not ship this pre-built :-(
 	use doc && doinfo Documentation/{git,gitman}.info
 
-	dobashcompletion contrib/completion/git-completion.bash ${PN}
+	newbashcomp contrib/completion/git-completion.bash ${PN}
 
 	if use emacs ; then
 		elisp-install ${PN} contrib/emacs/git.{el,elc} || die
@@ -339,7 +380,7 @@ src_install() {
 	fi
 
 	dobin contrib/fast-import/git-p4
-	dodoc contrib/fast-import/git-p4.txt
+	#dodoc contrib/fast-import/git-p4.txt # Moved upstream
 	newbin contrib/fast-import/import-tars.perl import-tars
 	newbin contrib/git-resurrect.sh git-resurrect
 
@@ -416,6 +457,7 @@ src_test() {
 	# t0001-init.sh - check for init notices EPERM*  fails
 	local tests_nonroot="t0001-init.sh \
 		t0004-unwritable.sh \
+		t0070-fundamental.sh \
 		t1004-read-tree-m-u-wf.sh \
 		t3700-add.sh \
 		t7300-clean.sh"
@@ -468,21 +510,23 @@ src_test() {
 	sed -e '/^[[:space:]]*$(MAKE) clean/s,^,#,g' \
 		-i "${S}"/t/Makefile
 
-	# Clean old results first
+	# Clean old results first, must always run
 	cd "${S}/t"
-	git_emake clean
+	nonfatal git_emake clean 
 
-	# Now run the tests
+	# Now run the tests, keep going if we hit an error, and don't terminate on
+	# failure
 	cd "${S}"
 	einfo "Start test run"
-	git_emake test
+	#MAKEOPTS=-j1 
+	nonfatal git_emake --keep-going test
 	rc=$?
 
-	# Display nice results
+	# Display nice results, now print the results
 	cd "${S}/t"
-	git_emake aggregate-results
+	nonfatal git_emake aggregate-results
 
-	# And exit
+	# And bail if there was a problem
 	[ $rc -eq 0 ] || die "tests failed. Please file a bug."
 }
 
@@ -495,6 +539,7 @@ showpkgdeps() {
 pkg_postinst() {
 	use emacs && elisp-site-regen
 	use python && python_mod_optimize git_remote_helpers
+		einfo "Please read /usr/share/bash-completion/git for Git bash completion"
 	elog "These additional scripts need some dependencies:"
 	echo
 	showpkgdeps git-quiltimport "dev-util/quilt"

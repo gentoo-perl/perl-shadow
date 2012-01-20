@@ -1,8 +1,8 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/git-1.7.7.ebuild,v 1.2 2011/10/01 05:58:42 mr_bones_ Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/git-1.7.8.4.ebuild,v 1.1 2012/01/20 08:32:39 robbat2 Exp $
 
-EAPI=3
+EAPI=4
 
 GENTOO_DEPEND_ON_PERL=no
 
@@ -11,7 +11,7 @@ PYTHON_DEPEND="python? 2"
 [[ ${PV} == *9999 ]] && SCM="git-2"
 EGIT_REPO_URI="git://git.kernel.org/pub/scm/git/git.git"
 
-inherit toolchain-funcs eutils elisp-common perl-module bash-completion python ${SCM}
+inherit toolchain-funcs eutils elisp-common perl-module bash-completion-r1 python ${SCM}
 
 MY_PV="${PV/_rc/.rc}"
 MY_P="${PN}-${MY_PV}"
@@ -46,7 +46,7 @@ IUSE="+blksha1 +curl cgi doc emacs gtk iconv +perl +python ppcsha1 tk +threads +
 CDEPEND="
 	!blksha1? ( dev-libs/openssl )
 	sys-libs/zlib
-	perl?   ( dev-lang/perl[-build] )
+	perl?   ( dev-lang/perl[-build] dev-libs/libpcre )
 	tk?     ( dev-lang/tk )
 	curl?   (
 		net-misc/curl
@@ -90,15 +90,14 @@ fi
 SITEFILE=50${PN}-gentoo.el
 S="${WORKDIR}/${MY_P}"
 
+REQUIRED_USE="
+	cgi? ( perl )
+	cvs? ( perl )
+	subversion? ( perl )
+	webdav? ( curl )
+"
+
 pkg_setup() {
-	if ! use perl ; then
-		use cgi && ewarn "gitweb needs USE=perl, ignoring USE=cgi"
-		use cvs && ewarn "CVS integration needs USE=perl, ignoring USE=cvs"
-		use subversion && ewarn "git-svn needs USE=perl, it won't work"
-	fi
-	if use webdav && ! use curl ; then
-		ewarn "USE=webdav needs USE=curl. Ignoring"
-	fi
 	if use subversion && has_version dev-vcs/subversion && built_with_use --missing false dev-vcs/subversion dso ; then
 		ewarn "Per Gentoo bugs #223747, #238586, when subversion is built"
 		ewarn "with USE=dso, there may be weird crashes in git-svn. You"
@@ -147,7 +146,7 @@ exportmakeopts() {
 	use tk \
 		|| myopts="${myopts} NO_TCLTK=YesPlease"
 	use perl \
-		&& myopts="${myopts} INSTALLDIRS=vendor" \
+		&& myopts="${myopts} INSTALLDIRS=vendor USE_LIBPCRE=yes" \
 		|| myopts="${myopts} NO_PERL=YesPlease"
 	use python \
 		|| myopts="${myopts} NO_PYTHON=YesPlease"
@@ -337,7 +336,7 @@ src_install() {
 	# Upstream does not ship this pre-built :-(
 	use doc && doinfo Documentation/{git,gitman}.info
 
-	dobashcompletion contrib/completion/git-completion.bash ${PN}
+	newbashcomp contrib/completion/git-completion.bash ${PN}
 
 	if use emacs ; then
 		elisp-install ${PN} contrib/emacs/git.{el,elc} || die
@@ -513,7 +512,6 @@ showpkgdeps() {
 pkg_postinst() {
 	use emacs && elisp-site-regen
 	use python && python_mod_optimize git_remote_helpers
-	use bash-completion && \
 		einfo "Please read /usr/share/bash-completion/git for Git bash completion"
 	elog "These additional scripts need some dependencies:"
 	echo
