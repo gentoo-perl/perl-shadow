@@ -1,6 +1,12 @@
-# ChangeLog for dev-perl/sdl-perl
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/sdl-perl/ChangeLog,v 1.59 2010/01/23 11:07:50 tove Exp $
+# ChangeLog for dev-perl/SDL
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/SDL/ChangeLog,v 1.1 2012/01/21 21:00:26 ssuominen Exp $
+
+*SDL-2.536 (21 Jan 2012)
+
+  21 Jan 2012; Samuli Suominen <ssuominen@gentoo.org> +SDL-2.536.ebuild:
+  Version bump wrt #356535 by Satoshi Hayazaki. Rename dev-perl/sdl-perl
+  to dev-perl/SDL.
 
   20 Jan 2010; Torsten Veller <tove@gentoo.org> sdl-perl-2.2.6.ebuild:
   Remove YAML from Build.PL (#301442)

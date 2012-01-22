@@ -1,8 +1,8 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/sdl-perl/sdl-perl-2.2.6.ebuild,v 1.6 2010/01/23 11:07:50 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/SDL/SDL-2.2.6.ebuild,v 1.1 2012/01/21 21:00:26 ssuominen Exp $
 
-EAPI=2
+EAPI=4
 
 MODULE_AUTHOR=KTHAKORE
 MY_PN=SDL_Perl
@@ -37,6 +37,6 @@ S=${WORKDIR}/${MY_P}
 
 src_prepare() {
 	# YAML is not used
-	sed -i "/^use YAML/d" "${S}"/Build.PL || die
+	sed -i -e "/^use YAML/d" "${S}"/Build.PL || die
 	perl-module_src_prepare
 }
