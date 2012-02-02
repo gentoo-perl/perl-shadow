@@ -1,11 +1,11 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/AnyEvent/AnyEvent-6.130.0.ebuild,v 1.1 2012/01/28 08:01:56 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/AnyEvent/AnyEvent-6.140.0.ebuild,v 1.1 2012/02/01 16:52:03 tove Exp $
 
 EAPI=4
 
 MODULE_AUTHOR=MLEHMANN
-MODULE_VERSION=6.13
+MODULE_VERSION=6.14
 inherit perl-module
 
 DESCRIPTION="Provides a uniform interface to various event loops"
