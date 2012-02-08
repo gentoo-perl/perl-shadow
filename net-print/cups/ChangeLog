@@ -1,6 +1,22 @@
 # ChangeLog for net-print/cups
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.450 2012/02/05 20:54:56 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.453 2012/02/07 16:43:38 dilfridge Exp $
+
+  07 Feb 2012; Andreas K. Huettel <dilfridge@gentoo.org> cups-1.5.2-r1.ebuild:
+  Drop php scripting support; it is unmaintained by upstream, has already been
+  removed in trunk, and displays build failures with recent php. Bug 388105
+
+*cups-1.5.2-r1 (07 Feb 2012)
+
+  07 Feb 2012; Andreas K. Huettel <dilfridge@gentoo.org> -cups-1.5.2.ebuild,
+  +cups-1.5.2-r1.ebuild:
+  Follow Ubuntu/Debian and use their patch to revert the buggy ipp backend to
+  1.4 state, should fix bug 402063 for now.
+
+*cups-1.5.2 (07 Feb 2012)
+
+  07 Feb 2012; Andreas K. Huettel <dilfridge@gentoo.org> +cups-1.5.2.ebuild:
+  Version bump
 
   05 Feb 2012; Markus Meier <maekke@gentoo.org> cups-1.5.0-r4.ebuild:
   add ~arm, bug #401067
