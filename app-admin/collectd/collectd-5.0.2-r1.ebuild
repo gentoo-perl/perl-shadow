@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-admin/collectd/collectd-5.0.0-r2.ebuild,v 1.1 2011/09/17 22:48:14 dilfridge Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-admin/collectd/collectd-5.0.2-r1.ebuild,v 1.1 2012/02/12 16:17:53 dilfridge Exp $
 
 EAPI=4
 
@@ -21,7 +21,7 @@ IUSE="contrib debug kernel_linux kernel_FreeBSD kernel_Darwin perl static-libs"
 COLLECTD_IMPOSSIBLE_PLUGINS="netapp pinba xmms"
 
 # Plugins that still need some work
-COLLECTD_UNTESTED_PLUGINS="ipvs apple_sensors routeros tape zfs_arc modbus amqp genericjmx lpar redis threshold write_redis v5upgrade"
+COLLECTD_UNTESTED_PLUGINS="ipvs apple_sensors tape zfs_arc modbus amqp genericjmx lpar redis threshold write_redis v5upgrade"
 
 # Plugins that have been (compile) tested and can be enabled via COLLECTD_PLUGINS
 COLLECTD_TESTED_PLUGINS="apache apcups ascent battery bind conntrack contextswitch
@@ -31,8 +31,8 @@ COLLECTD_TESTED_PLUGINS="apache apcups ascent battery bind conntrack contextswit
 	onewire openvpn perl ping postgresql powerdns processes protocols python
 	rrdcached sensors serial snmp swap table tail tcpconns teamspeak2 ted thermal
 	tokyotyrant uptime users varnish vmem vserver wireless csv exec logfile network
-	notify_desktop notify_email oracle perl python rrdcached rrdtool syslog unixsock write_http
-	match_empty_counter match_hashed match_regex match_timediff match_value
+	notify_desktop notify_email oracle perl python routeros rrdcached rrdtool syslog unixsock
+	write_http match_empty_counter match_hashed match_regex match_timediff match_value
 	target_notification target_replace target_scale target_set uuid"
 
 COLLECTD_DISABLED_PLUGINS="${COLLECTD_IMPOSSIBLE_PLUGINS} ${COLLECTD_UNTESTED_PLUGINS}"
@@ -76,6 +76,7 @@ COMMON_DEPEND="
 	collectd_plugins_ping?			( net-libs/liboping )
 	collectd_plugins_postgresql?		( >=dev-db/postgresql-base-8.2 )
 	collectd_plugins_python?		( =dev-lang/python-2* )
+	collectd_plugins_routeros?		( net-libs/librouteros )
 	collectd_plugins_rrdcached?		( >=net-analyzer/rrdtool-1.4 )
 	collectd_plugins_rrdtool?		( >=net-analyzer/rrdtool-1.2.27 )
 	collectd_plugins_sensors?		( sys-apps/lm_sensors )
@@ -84,7 +85,7 @@ COMMON_DEPEND="
 	collectd_plugins_varnish?		( www-servers/varnish )
 	collectd_plugins_write_http?		( net-misc/curl )
 
-	kernel_FreeBSD?	(
+	kernel_FreeBSD? (
 		collectd_plugins_disk?		( >=sys-libs/libstatgrab-0.16 )
 		collectd_plugins_interface?	( >=sys-libs/libstatgrab-0.16 )
 		collectd_plugins_load?		( >=sys-libs/libstatgrab-0.16 )
@@ -95,7 +96,7 @@ COMMON_DEPEND="
 
 DEPEND="${COMMON_DEPEND}
 	dev-util/pkgconfig
-	kernel_linux?	(
+	kernel_linux? (
 		collectd_plugins_vserver?	( sys-kernel/vserver-sources )
 	)"
 
@@ -104,11 +105,11 @@ RDEPEND="${COMMON_DEPEND}
 
 PATCHES=(
 	"${FILESDIR}/${PN}-4.10.1"-{libperl,libiptc,noowniptc}.patch
-	"${FILESDIR}/${PN}-4.10.2"-{libocci,libnotify-0.7,nohal}.patch
+	"${FILESDIR}/${PN}-4.10.2"-{libocci,nohal}.patch
 	"${FILESDIR}/${PN}-4.10.3"-{lt,werror}.patch
-	"${FILESDIR}/${PN}-5.0.0"-yajl2.patch
-	"${FILESDIR}/${PN}-5.0.0"-yajl2-2.patch
-	"${FILESDIR}/${PN}-5.0.0"-varnish.patch
+	"${FILESDIR}/${PN}-5.0.1"-varnish.patch
+	"${FILESDIR}/${PN}-5.0.2"-irq.patch
+	"${FILESDIR}/${PN}-5.0.2"-message.patch
 	)
 
 # @FUNCTION: collectd_plugin_kernel_linux
@@ -348,9 +349,10 @@ pkg_postinst() {
 		elog "The scripts in /usr/share/doc/${PF}/collection3 for generating graphs need dev-perl/HTML-Parser,"
 		elog "dev-perl/config-general, dev-perl/regexp-common, and net-analyzer/rrdtool[perl] to be installed."
 	fi
-	ewarn
-	ewarn "Version 5 of collectd uses a database format different from version 4. You will"
-	ewarn "have to migrate your database after the upgrade, following the guide at"
-	ewarn "   http://www.collectd.org/wiki/index.php/V4_to_v5_migration_guide"
-	ewarn
+
+	if [[ ${REPLACING_VERSIONS} < 5 ]]; then
+		ewarn "Version 5 of collectd uses a database format different from version 4. You will"
+		ewarn "have to migrate your database after the upgrade, following the guide at"
+		ewarn "   http://www.collectd.org/wiki/index.php/V4_to_v5_migration_guide"
+	fi
 }
