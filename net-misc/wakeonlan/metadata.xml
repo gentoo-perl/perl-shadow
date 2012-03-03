@@ -2,7 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <maintainer>
-  <email>hwoarang@gentoo.org</email>
-  <name>Markos Chandras</name>
+  <email>axs@gentoo.org</email>
+  <name>Ian Stakenvicius</name>
+  <description>Primary maintainer</description>
 </maintainer>
 </pkgmetadata>
