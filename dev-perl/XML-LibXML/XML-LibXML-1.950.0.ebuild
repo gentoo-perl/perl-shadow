@@ -1,11 +1,11 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/XML-LibXML/XML-LibXML-1.940.0.ebuild,v 1.1 2012/03/04 07:46:08 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/XML-LibXML/XML-LibXML-1.950.0.ebuild,v 1.1 2012/03/06 15:00:07 tove Exp $
 
 EAPI=4
 
 MODULE_AUTHOR=SHLOMIF
-MODULE_VERSION=1.94
+MODULE_VERSION=1.95
 inherit perl-module
 
 DESCRIPTION="A Perl module to parse XSL Transformational sheets using gnome's libXSLT"
