@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-backup/amanda/amanda-3.2.1.ebuild,v 1.12 2012/05/17 04:59:51 jer Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-backup/amanda/amanda-3.3.1.ebuild,v 1.1 2012/05/17 05:58:29 robbat2 Exp $
 
 EAPI=3
 inherit autotools eutils perl-module
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.amanda.org/"
 SRC_URI="mirror://sourceforge/amanda/${P}.tar.gz"
 LICENSE="as-is"
 SLOT="0"
-KEYWORDS="amd64 ppc ppc64 sparc x86"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~sparc ~x86"
 RDEPEND="sys-libs/readline
 	virtual/inetd
 	sys-apps/gawk
@@ -144,6 +144,11 @@ src_prepare() {
 
 	# gentoo bug 248838, check /sbin stuff before /bin
 	#epatch "${FILESDIR}"/${PN}-2.6.0_p2-syslocpath.patch
+
+	# gentoo bug #415587
+	epatch "${FILESDIR}"/amanda-r4593.patch
+	epatch "${FILESDIR}"/amanda-r4595.patch
+	epatch "${FILESDIR}"/amanda-r4698.patch
 
 	# gentoo bug #331111
 	sed -i '/^check-local: check-perl$/d' "${S}"/config/automake/scripts.am
