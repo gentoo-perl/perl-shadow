@@ -1,6 +1,16 @@
 # ChangeLog for dev-perl/Gtk2-Notify
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Gtk2-Notify/ChangeLog,v 1.2 2012/03/01 16:17:46 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Gtk2-Notify/ChangeLog,v 1.5 2012/05/20 14:24:25 ssuominen Exp $
+
+  20 May 2012; Samuli Suominen <ssuominen@gentoo.org> metadata.xml:
+  Remove myself from metadata.xml and leave the package to the perl herd.
+
+  20 May 2012; Samuli Suominen <ssuominen@gentoo.org> Gtk2-Notify-0.05.ebuild:
+  Use virtualx.eclass to ensure DISPLAY is set for FEATURES="test" wrt #416729
+  by Paweł Hajdan, Jr.
+
+  20 May 2012; Agostino Sarubbo <ago@gentoo.org> Gtk2-Notify-0.05.ebuild:
+  Stable for amd64, wrt bug #416121
 
   01 Mar 2012; Torsten Veller <tove@gentoo.org> metadata.xml:
   Add missing cpan remote-id tags in metadata.xml (#406287)
