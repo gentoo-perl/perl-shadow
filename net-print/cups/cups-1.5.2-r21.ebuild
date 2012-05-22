@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.5.2-r21.ebuild,v 1.2 2012/05/12 01:47:12 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.5.2-r21.ebuild,v 1.4 2012/05/21 22:25:01 dilfridge Exp $
 
 EAPI=4
 
@@ -239,6 +239,10 @@ src_install() {
 		popd > /dev/null
 	fi
 
+	# move the default config file to docs
+	dodoc "${ED}"/etc/cups/cupsd.conf.default
+	rm -f "${ED}"/etc/cups/cupsd.conf.default
+
 	# clean out cups init scripts
 	rm -rf "${ED}"/etc/{init.d/cups,rc*,pam.d/cups}
 
@@ -296,7 +300,7 @@ pkg_postinst() {
 	elog "take a look at: http://www.gentoo.org/doc/en/printing-howto.xml"
 	echo
 	elog "Network browsing for printers is now switched off by default in the config file."
-	elog "To (re-)enable it, edit /etc/cupsd.conf and set \"Browsing On\", "
+	elog "To (re-)enable it, edit /etc/cups/cupsd.conf and set \"Browsing On\", "
 	elog "afterwards re-start or reload cups."
 	echo
 }
