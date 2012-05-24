@@ -1,0 +1,13 @@
+# ChangeLog for dev-perl/Data-Uniqid
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Data-Uniqid/ChangeLog,v 1.2 2012/05/24 05:36:27 flameeyes Exp $
+
+  24 May 2012; Diego E. Pettenò <flameeyes@gentoo.org> Data-Uniqid-0.12.ebuild:
+  Fix header.
+
+*Data-Uniqid-0.12 (24 May 2012)
+
+  24 May 2012; Diego E. Pettenò <flameeyes@gentoo.org> +Data-Uniqid-0.12.ebuild,
+  +metadata.xml:
+  Import of Data-Uniqid needed for google-api-adwords-perl tests.
+
