@@ -1,11 +1,11 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-im/pidgin/pidgin-2.10.3-r100.ebuild,v 1.3 2012/05/22 13:57:32 darkside Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-im/pidgin/pidgin-2.10.4.ebuild,v 1.4 2012/05/29 12:07:14 ago Exp $
 
 EAPI=4
 
 GENTOO_DEPEND_ON_PERL=no
-inherit flag-o-matic eutils toolchain-funcs multilib perl-app gnome2 python autotools
+inherit flag-o-matic eutils toolchain-funcs multilib perl-app gnome2 python
 
 DESCRIPTION="GTK Instant Messenger client"
 HOMEPAGE="http://pidgin.im/"
@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos"
+KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~ppc ~ppc64 ~sparc x86 ~x86-freebsd ~amd64-linux ~x86-linux ~x86-macos"
 IUSE="dbus debug doc eds gadu gnutls +gstreamer +gtk idn meanwhile"
 IUSE+=" networkmanager nls perl silc tcl tk spell sasl ncurses"
 IUSE+=" groupwise prediction python +xscreensaver zephyr zeroconf" # mono"
@@ -40,7 +40,7 @@ RDEPEND="
 		prediction? ( >=dev-db/sqlite-3.3:3 ) )
 	gstreamer? ( =media-libs/gstreamer-0.10*
 		=media-libs/gst-plugins-good-0.10*
-		net-libs/farstream
+		|| ( net-libs/farstream net-libs/farsight2 )
 		media-plugins/gst-plugins-meta
 		media-plugins/gst-plugins-gconf )
 	zeroconf? ( net-dns/avahi[dbus] )
@@ -134,8 +134,6 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/${PN}-2.10.0-gold.patch"
-	epatch "${FILESDIR}/port-to-farstream-v5.patch"
-	eautoreconf
 }
 
 src_configure() {
