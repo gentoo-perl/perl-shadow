@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-9999.ebuild,v 1.7 2012/06/01 04:19:51 zmedico Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-9999.ebuild,v 1.10 2012/06/02 19:49:55 dilfridge Exp $
 
 EAPI=4
 
@@ -8,12 +8,12 @@ PYTHON_DEPEND="python? 2:2.5"
 
 inherit autotools base fdo-mime gnome2-utils flag-o-matic linux-info multilib pam python user versionator java-pkg-opt-2 systemd
 
-MY_P=${P/_}
-MY_PV=${PV/_}
+MY_P=${P/_beta/b}
+MY_PV=${PV/_beta/b}
 
 if [[ "${PV}" != "9999" ]]; then
 	SRC_URI="mirror://easysw/${PN}/${MY_PV}/${MY_P}-source.tar.bz2"
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~s390 ~sh ~sparc ~x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd"
 else
 	inherit subversion
 	ESVN_REPO_URI="http://svn.easysw.com/public/cups/trunk"
@@ -57,9 +57,7 @@ RDEPEND="
 	usb? ( virtual/libusb:0 )
 	X? ( x11-misc/xdg-utils )
 	xinetd? ( sys-apps/xinetd )
-	zeroconf? ( || ( net-dns/avahi[mdnsresponder-compat]
-			>=net-misc/mDNSResponder-320.10.80 )
-)
+	zeroconf? ( net-dns/avahi[mdnsresponder-compat] )
 "
 
 DEPEND="${RDEPEND}
@@ -69,6 +67,7 @@ DEPEND="${RDEPEND}
 PDEPEND="
 	app-text/ghostscript-gpl[cups]
 	>=app-text/poppler-0.12.3-r3[utils]
+	net-print/cups-filters
 	filters? ( net-print/foomatic-filters )
 "
 
@@ -170,7 +169,6 @@ src_configure() {
 		--with-cups-group=lp \
 		--with-docdir=/usr/share/cups/html \
 		--with-languages="${LINGUAS}" \
-		--with-pdftops=/usr/bin/pdftops \
 		--with-system-groups=lpadmin \
 		$(use_enable acl) \
 		$(use_enable avahi) \
