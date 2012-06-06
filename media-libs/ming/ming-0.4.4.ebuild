@@ -1,14 +1,15 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/ming/ming-0.4.3-r2.ebuild,v 1.4 2012/06/05 20:58:27 ranger Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-libs/ming/ming-0.4.4.ebuild,v 1.1 2012/06/05 16:28:13 jlec Exp $
 
-EAPI="3"
+EAPI=4
 
 PHP_EXT_NAME=ming
 PHP_EXT_OPTIONAL_USE=php
 PYTHON_DEPEND="python? 2"
+AUTOTOOLS_AUTORECONF=yes
 
-inherit eutils autotools flag-o-matic multilib php-ext-source-r2 perl-module python
+inherit autotools-utils flag-o-matic multilib php-ext-source-r2 perl-module python
 
 DESCRIPTION="An Open Source library for Flash movie generation."
 HOMEPAGE="http://ming.sourceforge.net/"
@@ -16,7 +17,7 @@ SRC_URI="mirror://sourceforge/ming/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ~ppc ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
 IUSE="+perl +python php static-libs"
 
 RDEPEND="perl? ( dev-lang/perl )
@@ -37,13 +38,14 @@ S=${WORKDIR}/${P/_/.}
 RESTRICT="test"
 
 pkg_setup() {
-	use python && python_set_active_version 2
+	use python && python_set_active_version 2 && python_pkg_setup
 }
 
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-libpng-1.5.patch
-	epatch "${FILESDIR}"/${P}-perl-5.14.patch
+PATCHES=(
+	"${FILESDIR}"/${P}-vasprintf.patch
+	"${FILESDIR}"/${PN}-0.4.3-perl-5.14.patch )
 
+src_prepare() {
 	# Let's get rid of the TEXTRELS, link dynamic. Use gif.
 	sed -i \
 		-e 's/libming.a/libming.so/' \
@@ -59,21 +61,23 @@ src_prepare() {
 		cd "${S}"
 	fi
 
-	eautoreconf
+	autotools-utils_src_prepare
 }
 
 src_configure() {
 	# build is sensitive to -O3 (bug #297437)
 	replace-flags -O3 -O2
 
-	econf \
-		$(use_enable static-libs static) \
-		$(use_enable perl) \
+	local myeconfargs=(
+		$(use_enable static-libs static)
+		$(use_enable perl)
 		$(use_enable python)
+		)
+	autotools-utils_src_configure
 }
 
 src_compile() {
-	emake || die
+	autotools-utils_src_compile
 
 	if use php; then
 		cd "${S}"/php_ext
@@ -84,19 +88,12 @@ src_compile() {
 	fi
 }
 
-src_test() {
-	emake check || die
-}
-
 src_install() {
-	emake DESTDIR="${D}" INSTALLDIRS="vendor" install || die
-
-	rm -f "${ED}"usr/lib*/lib${PN}.la
+	autotools-utils_src_install INSTALLDIRS="vendor"
 
 	fixlocalpod
 
-	# Get rid of the precompiled stuff, we generate it later.
-	find "${ED}" -name "*.pyc" -print0 | xargs -0 rm -f
+	use python && python_clean_installation_image
 
 	if use php; then
 		cd "${S}"/php_ext

@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-1.1.19.ebuild,v 1.4 2012/06/06 08:30:35 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-servers/nginx/nginx-1.2.1.ebuild,v 1.2 2012/06/06 08:30:35 patrick Exp $
 
 EAPI="4"
 
@@ -91,7 +91,7 @@ NGINX_MODULES_3RD="
 	http_slowfs_cache
 	http_fancyindex"
 
-IUSE="aio debug +http +http-cache ipv6 libatomic +pcre pcre-jit ssl vim-syntax"
+IUSE="aio debug +http +http-cache ipv6 libatomic +pcre pcre-jit selinux ssl vim-syntax"
 
 for mod in $NGINX_MODULES_STD; do
 	IUSE="${IUSE} +nginx_modules_http_${mod}"
@@ -111,6 +111,7 @@ done
 
 CDEPEND="
 	pcre? ( >=dev-libs/libpcre-4.2 )
+	selinux? ( sec-policy/selinux-nginx )
 	ssl? ( dev-libs/openssl )
 	http-cache? ( userland_GNU? ( dev-libs/openssl ) )
 	nginx_modules_http_geo? ( dev-libs/geoip )
