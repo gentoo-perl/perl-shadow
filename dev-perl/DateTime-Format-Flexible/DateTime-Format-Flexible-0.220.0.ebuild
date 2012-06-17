@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/DateTime-Format-Flexible/DateTime-Format-Flexible-0.220.0.ebuild,v 1.1 2012/06/14 17:48:06 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/DateTime-Format-Flexible/DateTime-Format-Flexible-0.220.0.ebuild,v 1.2 2012/06/16 19:04:04 tove Exp $
 
 EAPI=4
 
@@ -22,7 +22,5 @@ DEPEND="${RDEPEND}
 	test? (
 		dev-perl/Test-MockTime
 	)"
-#		dev-perl/Test-Pod
-#		dev-perl/Test-Pod-Coverage
 
 SRC_TEST=do
