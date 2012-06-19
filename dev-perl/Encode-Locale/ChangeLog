@@ -1,6 +1,12 @@
 # ChangeLog for dev-perl/Encode-Locale
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Encode-Locale/ChangeLog,v 1.21 2012/05/05 23:28:23 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Encode-Locale/ChangeLog,v 1.23 2012/06/19 13:12:53 ago Exp $
+
+  19 Jun 2012; Agostino Sarubbo <ago@gentoo.org> Encode-Locale-1.30.0.ebuild:
+  Stable for amd64, wrt bug #414733
+
+  19 Jun 2012; Jeff Horelick <jdhore@gentoo.org> Encode-Locale-1.30.0.ebuild:
+  marked x86 per bug 414733
 
   05 May 2012; Alexis Ballier <aballier@gentoo.org>
   Encode-Locale-1.30.0.ebuild:
