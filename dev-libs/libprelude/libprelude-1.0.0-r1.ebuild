@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/libprelude/libprelude-1.0.0-r1.ebuild,v 1.11 2012/04/07 17:56:09 maekke Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/libprelude/libprelude-1.0.0-r1.ebuild,v 1.13 2012/06/23 09:22:37 ssuominen Exp $
 
 EAPI="3"
 GENTOO_DEPEND_ON_PERL="no"
@@ -19,7 +19,8 @@ SLOT="0"
 KEYWORDS="amd64 x86"
 IUSE="doc lua perl python ruby"
 
-RDEPEND=">=net-libs/gnutls-1.0.17
+RDEPEND=">=dev-libs/libgcrypt-1.1.94
+	>=net-libs/gnutls-1.0.17
 	lua? ( dev-lang/lua )
 	perl? ( dev-lang/perl )
 	ruby? ( dev-lang/ruby )
@@ -38,8 +39,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-libtool.patch
-	epatch "${FILESDIR}"/${P}-ruby.patch
+	epatch \
+		"${FILESDIR}"/${P}-libtool.patch \
+		"${FILESDIR}"/${P}-ruby.patch \
+		"${FILESDIR}"/${P}-ptrdiff_t.patch
 
 	# Avoid null runpaths in Perl bindings.
 	sed -e 's/ LD_RUN_PATH=""//' -i bindings/Makefile.am bindings/low-level/Makefile.am || die "sed failed"
