@@ -1,10 +1,10 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-lang/rakudo/rakudo-2012.02.ebuild,v 1.1 2012/03/08 04:31:03 patrick Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-lang/rakudo/rakudo-2012.06.ebuild,v 1.1 2012/06/25 02:50:46 patrick Exp $
 
 EAPI=3
 
-PARROT_VERSION="4.1.0"
+PARROT_VERSION="4.4.0"
 NQP_VERSION="${PV}"
 
 inherit eutils multilib
@@ -22,7 +22,6 @@ RDEPEND=">=dev-lang/parrot-${PARROT_VERSION}[unicode]
 	>=dev-lang/nqp-${NQP_VERSION}"
 DEPEND="${RDEPEND}
 	dev-lang/perl"
-#	>=dev-lang/perl-5.10"
 
 src_prepare() {
 	sed -i "s,\$(DOCDIR)/rakudo$,&-${PVR}," tools/build/Makefile.in || die

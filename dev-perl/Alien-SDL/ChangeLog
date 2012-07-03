@@ -1,6 +1,12 @@
 # ChangeLog for dev-perl/Alien-SDL
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Alien-SDL/ChangeLog,v 1.10 2012/06/24 13:00:30 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Alien-SDL/ChangeLog,v 1.12 2012/07/03 11:15:21 ago Exp $
+
+  03 Jul 2012; Agostino Sarubbo <ago@gentoo.org> Alien-SDL-1.434.ebuild:
+  Stable for amd64, wrt bug #424533
+
+  03 Jul 2012; Jeff Horelick <jdhore@gentoo.org> Alien-SDL-1.434.ebuild:
+  marked x86 per bug 424533
 
   24 Jun 2012; Torsten Veller <tove@gentoo.org> metadata.xml:
   Update CPAN upstream info
