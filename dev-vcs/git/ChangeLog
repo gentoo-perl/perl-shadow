@@ -1,6 +1,24 @@
 # ChangeLog for dev-vcs/git
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/ChangeLog,v 1.139 2012/07/02 05:49:01 jdhore Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/ChangeLog,v 1.144 2012/07/10 19:08:56 ranger Exp $
+
+  10 Jul 2012; Brent Baude <ranger@gentoo.org> git-1.7.8.6.ebuild:
+  Marking git-1.7.8.6 ppc64 for bug 418381
+
+  10 Jul 2012; Akinori Hattori <hattya@gentoo.org> git-1.7.8.6.ebuild:
+  ia64 stable wrt bug #418381
+
+  08 Jul 2012; Michael Weber <xmw@gentoo.org> git-1.7.8.6.ebuild:
+  ppc stable (bug 418381)
+
+*git-1.7.11.1 (07 Jul 2012)
+
+  07 Jul 2012; Robin H. Johnson <robbat2@gentoo.org>
+  +files/git-1.7.11.1-optional-cvs.patch, +git-1.7.11.1.ebuild:
+  Version bump. Still suffers from bug #391707: git-svn failures.
+
+  03 Jul 2012; Jeroen Roovers <jer@gentoo.org> git-1.7.8.6.ebuild:
+  Stable for HPPA (bug #418381).
 
   02 Jul 2012; Jeff Horelick <jdhore@gentoo.org> git-1.7.8.6.ebuild:
   marked x86 per bug 418381
