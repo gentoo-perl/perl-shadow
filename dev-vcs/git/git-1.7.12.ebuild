@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/git-9999.ebuild,v 1.35 2012/08/22 05:10:14 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/git-1.7.12.ebuild,v 1.2 2012/08/22 05:10:14 robbat2 Exp $
 
 EAPI=4
 
@@ -209,7 +209,7 @@ src_unpack() {
 src_prepare() {
 	# bug #418431 - stated for upstream 1.7.13. Developed by Michael Schwern,
 	# funded as a bounty by the Gentoo Foundation.
-	epatch "${FILESDIR}"/git-1.7.12-git-svn-backport.patch
+	#epatch "${FILESDIR}"/git-1.7.12-git-svn-backport.patch
 
 	# bug #350330 - automagic CVS when we don't want it is bad.
 	epatch "${FILESDIR}"/git-1.7.12-optional-cvs.patch
