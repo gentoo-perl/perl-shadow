@@ -1,13 +1,13 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-analyzer/net-snmp/net-snmp-5.7.2_rc1.ebuild,v 1.7 2012/08/20 21:19:29 johu Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-analyzer/net-snmp/net-snmp-5.7.2_rc1.ebuild,v 1.10 2012/08/28 17:56:12 ranger Exp $
 
 EAPI=4
 PYTHON_DEPEND="python? 2"
 
 WANT_AUTOMAKE=none
 
-PATCHSET=1
+PATCHSET=3
 
 inherit eutils perl-module python autotools
 
@@ -21,7 +21,7 @@ SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.gz
 # GPL-2 for the init scripts
 LICENSE="as-is BSD GPL-2"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ~ppc ppc64 s390 sh sparc x86"
 IUSE="bzip2 doc elf ipv6 mfd-rewrites minimal perl python rpm selinux ssl tcpd X zlib lm_sensors ucd-compat"
 
 COMMON="ssl? ( >=dev-libs/openssl-0.9.6d )
@@ -100,7 +100,9 @@ src_configure() {
 		$(use_with tcpd libwrap) \
 		$(use_with bzip2) \
 		$(use_with zlib) \
-		$(use_with rpm)
+		$(use_with rpm) \
+		--without-nl \
+		--with-pci
 }
 
 src_compile() {
