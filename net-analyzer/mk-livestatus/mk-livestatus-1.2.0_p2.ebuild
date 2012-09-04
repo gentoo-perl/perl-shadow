@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-analyzer/mk-livestatus/mk-livestatus-1.1.10_p1.ebuild,v 1.2 2012/09/03 18:48:33 idl0r Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-analyzer/mk-livestatus/mk-livestatus-1.2.0_p2.ebuild,v 1.1 2012/09/03 19:14:10 idl0r Exp $
 
 EAPI=3
 
@@ -25,10 +25,17 @@ RDEPEND="perl? (
 		dev-lang/perl
 		virtual/perl-Digest-MD5
 		virtual/perl-Thread-Queue
+		virtual/perl-Time-HiRes
+		virtual/perl-Encode
+		dev-perl/JSON-XS
 	)"
 DEPEND="${RDEPEND}
 	perl? (
 		dev-perl/Module-Install
+		virtual/perl-ExtUtils-MakeMaker
+		virtual/perl-File-Path
+		virtual/perl-File-Spec
+		virtual/perl-File-Temp
 		test? (
 			dev-perl/File-Copy-Recursive
 			dev-perl/Test-Pod
@@ -56,8 +63,6 @@ src_prepare() {
 	fi
 
 	sed -i -e 's:$(LDFLAGS) -s:$(LDFLAGS):' src/Makefile.in || die
-
-	epatch "${FILESDIR}/gcc-4.7-compile.patch"
 }
 
 src_configure() {
