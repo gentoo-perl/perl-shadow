@@ -1,12 +1,12 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Panotools-Script/Panotools-Script-0.270.0.ebuild,v 1.1 2012/07/13 17:30:04 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Panotools-Script/Panotools-Script-0.270.0.ebuild,v 1.3 2012/09/05 07:25:53 tove Exp $
 
 EAPI=4
 
 MODULE_AUTHOR=BPOSTLE
 MODULE_VERSION=0.27
-inherit perl-module
+inherit eutils perl-module
 
 DESCRIPTION="A perl module for reading, writing, and manipulating hugin script files"
 
@@ -26,8 +26,7 @@ SRC_TEST="do"
 src_install() {
 	perl-module_src_install
 	if use gui ; then
-		insinto /usr/share/applications
-		doins "${S}"/desktop/*.desktop || die
+		domenu "${S}"/desktop/*.desktop || die
 	else
 		rm "${D}"/usr/bin/*-gui || die
 	fi
