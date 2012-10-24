@@ -1,6 +1,22 @@
 # ChangeLog for dev-vcs/git
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/ChangeLog,v 1.155 2012/08/24 17:11:07 robbat2 Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-vcs/git/ChangeLog,v 1.158 2012/10/18 00:44:40 robbat2 Exp $
+
+*git-1.7.12.4 (18 Oct 2012)
+
+  18 Oct 2012; Robin H. Johnson <robbat2@gentoo.org> +git-1.7.12.4.ebuild:
+  Bump.
+
+*git-1.7.12.3-r1 (11 Oct 2012)
+
+  11 Oct 2012; Robin H. Johnson <robbat2@gentoo.org> +git-1.7.12.3-r1.ebuild:
+  1.7.12.3 was based off 1.7.12-r1 instead of 1.7.12-r2, revbump to get the
+  other fixes again.
+
+*git-1.7.12.3 (10 Oct 2012)
+
+  10 Oct 2012; Robin H. Johnson <robbat2@gentoo.org> +git-1.7.12.3.ebuild:
+  Version bump per bug 437870.
 
   24 Aug 2012; Robin H. Johnson <robbat2@gentoo.org>
   -files/git-1.7.10.2-optional-cvs.patch,

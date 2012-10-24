@@ -1,6 +1,22 @@
 # ChangeLog for dev-perl/Config-IniFiles
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Config-IniFiles/ChangeLog,v 1.67 2012/06/24 12:59:56 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Config-IniFiles/ChangeLog,v 1.71 2012/10/21 18:18:36 armin76 Exp $
+
+  21 Oct 2012; Raúl Porcel <armin76@gentoo.org>
+  Config-IniFiles-2.710.0.ebuild, Config-IniFiles-2.750.0.ebuild,
+  Config-IniFiles-2.760.0.ebuild:
+  Drop alpha keywords
+
+  17 Oct 2012; Pawel Hajdan jr <phajdan.jr@gentoo.org>
+  Config-IniFiles-2.760.0.ebuild:
+  x86 stable wrt bug #433239
+
+  11 Oct 2012; Agostino Sarubbo <ago@gentoo.org>
+  Config-IniFiles-2.760.0.ebuild:
+  Stable for amd64, wrt bug #433239
+
+  10 Oct 2012; Brent Baude <ranger@gentoo.org> Config-IniFiles-2.760.0.ebuild:
+  Marking Config-IniFiles-2.760.0 ppc for bug 433239
 
   24 Jun 2012; Torsten Veller <tove@gentoo.org> metadata.xml:
   Update CPAN upstream info

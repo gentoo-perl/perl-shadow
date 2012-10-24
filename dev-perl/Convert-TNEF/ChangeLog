@@ -1,6 +1,27 @@
 # ChangeLog for dev-perl/Convert-TNEF
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Convert-TNEF/ChangeLog,v 1.24 2012/07/24 18:39:51 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Convert-TNEF/ChangeLog,v 1.30 2012/10/20 16:40:53 armin76 Exp $
+
+  20 Oct 2012; Raúl Porcel <armin76@gentoo.org> Convert-TNEF-0.170.0.ebuild,
+  Convert-TNEF-0.180.0.ebuild:
+  Drop alpha/ia64/sparc keywords
+
+  17 Oct 2012; Pawel Hajdan jr <phajdan.jr@gentoo.org>
+  Convert-TNEF-0.180.0.ebuild:
+  x86 stable wrt bug #433241
+
+  11 Oct 2012; Jeroen Roovers <jer@gentoo.org> Convert-TNEF-0.180.0.ebuild:
+  Stable for HPPA (bug #433241).
+
+  11 Oct 2012; Agostino Sarubbo <ago@gentoo.org> Convert-TNEF-0.180.0.ebuild:
+  Stable for amd64, wrt bug #433241
+
+  11 Oct 2012; Anthony G. Basile <blueness@gentoo.org>
+  Convert-TNEF-0.180.0.ebuild:
+  stable ppc64, bug #433241
+
+  10 Oct 2012; Brent Baude <ranger@gentoo.org> Convert-TNEF-0.180.0.ebuild:
+  Marking Convert-TNEF-0.180.0 ppc for bug 433241
 
 *Convert-TNEF-0.180.0 (24 Jul 2012)
 

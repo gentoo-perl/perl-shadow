@@ -1,6 +1,16 @@
 # ChangeLog for dev-perl/Email-Simple
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Email-Simple/ChangeLog,v 1.64 2012/09/02 17:12:37 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Email-Simple/ChangeLog,v 1.67 2012/10/11 14:26:15 ago Exp $
+
+  11 Oct 2012; Agostino Sarubbo <ago@gentoo.org> Email-Simple-2.102.0.ebuild:
+  Stable for amd64, wrt bug #433247
+
+  11 Oct 2012; Anthony G. Basile <blueness@gentoo.org>
+  Email-Simple-2.102.0.ebuild:
+  stable ppc64, bug #433247
+
+  10 Oct 2012; Brent Baude <ranger@gentoo.org> Email-Simple-2.102.0.ebuild:
+  Marking Email-Simple-2.102.0 ppc for bug 433247
 
   02 Sep 2012; Torsten Veller <tove@gentoo.org> -Email-Simple-2.100.0.ebuild:
   Cleanup

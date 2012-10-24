@@ -1,9 +1,9 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphicsmagick/graphicsmagick-1.3.13.ebuild,v 1.7 2012/03/25 15:40:54 armin76 Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-gfx/graphicsmagick/graphicsmagick-1.3.17.ebuild,v 1.1 2012/10/15 06:03:16 radhermit Exp $
 
-EAPI=4
-inherit eutils toolchain-funcs
+EAPI=5
+inherit toolchain-funcs
 
 MY_P=${P/graphicsm/GraphicsM}
 
@@ -13,24 +13,27 @@ SRC_URI="mirror://sourceforge/${PN}/${MY_P}.tar.xz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="alpha amd64 hppa ppc ppc64 sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos"
-IUSE="bzip2 cxx debug fpx imagemagick jbig jpeg jpeg2k lcms lzma modules openmp perl png q16 q32 static-libs svg threads tiff truetype wmf X zlib"
+KEYWORDS="~alpha ~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos"
+IUSE="bzip2 cxx debug fpx imagemagick jbig jpeg jpeg2k lcms lzma modules openmp perl png postscript q16 q32 static-libs svg threads tiff truetype wmf X zlib"
 
-RDEPEND="app-text/ghostscript-gpl
-	>=sys-devel/libtool-2.2.6b
+RDEPEND=">=sys-devel/libtool-2.2.6b
 	bzip2? ( app-arch/bzip2 )
 	fpx? ( media-libs/libfpx )
 	imagemagick? ( !media-gfx/imagemagick )
 	jbig? ( media-libs/jbigkit )
 	jpeg? ( virtual/jpeg )
-	jpeg2k? ( >=media-libs/jasper-1.701.0 )
+	jpeg2k? ( media-libs/jasper )
 	lcms? ( media-libs/lcms:2 )
 	lzma? ( app-arch/xz-utils )
 	perl? ( dev-lang/perl )
-	png? ( >=media-libs/libpng-1.2:0 )
+	png? ( media-libs/libpng:0 )
+	postscript? ( app-text/ghostscript-gpl )
 	svg? ( dev-libs/libxml2 )
-	tiff? ( >=media-libs/tiff-3.8.2:0 )
-	truetype? ( >=media-libs/freetype-2.0 )
+	tiff? ( media-libs/tiff:0 )
+	truetype? (
+		media-fonts/urw-fonts
+		>=media-libs/freetype-2
+		)
 	wmf? ( media-libs/libwmf )
 	X? (
 		x11-libs/libSM
@@ -40,10 +43,6 @@ RDEPEND="app-text/ghostscript-gpl
 DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${MY_P}
-
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-lzma_configure.patch
-}
 
 src_configure() {
 	local depth=8
@@ -62,7 +61,6 @@ src_configure() {
 		--enable-largefile \
 		--enable-shared \
 		$(use_enable static-libs static) \
-		$(use_enable debug ccmalloc) \
 		$(use_enable debug prof) \
 		$(use_enable debug gcov) \
 		$(use_enable imagemagick magick-compat) \
@@ -75,6 +73,7 @@ src_configure() {
 		$(use_with perl) \
 		--with-perl-options=INSTALLDIRS=vendor \
 		$(use_with bzip2 bzlib) \
+		$(use_with postscript dps) \
 		$(use_with fpx) \
 		--without-gslib \
 		$(use_with jbig) \
@@ -88,7 +87,7 @@ src_configure() {
 		$(use_with truetype ttf) \
 		$(use_with wmf) \
 		--with-fontpath="${EPREFIX}"/usr/share/fonts \
-		--with-gs-font-dir="${EPREFIX}"/usr/share/fonts/default/ghostscript \
+		--with-gs-font-dir="${EPREFIX}"/usr/share/fonts/urw-fonts \
 		--with-windows-font-dir="${EPREFIX}"/usr/share/fonts/corefonts \
 		$(use_with svg xml) \
 		$(use_with zlib) \
@@ -100,17 +99,13 @@ src_compile() {
 	use perl && emake perl-build
 }
 
-src_test() {
-	emake check
-}
-
 src_install() {
 	emake DESTDIR="${D}" install
 
 	if use perl; then
 		emake -C PerlMagick DESTDIR="${D}" install
-		find "${ED}" -type f -name perllocal.pod -delete
-		find "${ED}" -depth -mindepth 1 -type d -empty -delete
+		find "${ED}" -type f -name perllocal.pod -exec rm -f {} +
+		find "${ED}" -depth -mindepth 1 -type d -empty -exec rm -rf {} +
 	fi
 
 	find "${ED}" -name '*.la' -exec sed -i -e "/^dependency_libs/s:=.*:='':" {} +

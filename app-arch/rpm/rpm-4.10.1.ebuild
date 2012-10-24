@@ -1,20 +1,20 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/rpm/rpm-4.9.1.3.ebuild,v 1.10 2012/08/11 18:26:03 swift Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/rpm/rpm-4.10.1.ebuild,v 1.1 2012/10/24 13:39:52 scarabeus Exp $
 
 EAPI=4
 
 PYTHON_DEPEND="2"
 
-inherit eutils autotools flag-o-matic perl-module python
+inherit eutils autotools flag-o-matic perl-module python versionator
 
 DESCRIPTION="Red Hat Package Management Utils"
 HOMEPAGE="http://www.rpm.org"
-SRC_URI="http://rpm.org/releases/rpm-4.9.x/${P}.tar.bz2"
+SRC_URI="http://rpm.org/releases/rpm-$(get_version_component_range 1-2).x/${P}.tar.bz2"
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 sh sparc x86"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 
 IUSE="nls python doc caps lua acl selinux"
 
