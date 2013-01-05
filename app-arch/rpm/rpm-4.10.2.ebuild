@@ -1,6 +1,6 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-arch/rpm/rpm-4.10.1.ebuild,v 1.1 2012/10/24 13:39:52 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-arch/rpm/rpm-4.10.2.ebuild,v 1.2 2013/01/05 09:47:24 scarabeus Exp $
 
 EAPI=4
 
@@ -14,7 +14,7 @@ SRC_URI="http://rpm.org/releases/rpm-$(get_version_component_range 1-2).x/${P}.t
 
 LICENSE="GPL-2 LGPL-2"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86"
 
 IUSE="nls python doc caps lua acl selinux"
 
@@ -46,7 +46,7 @@ pkg_setup() {
 
 src_prepare() {
 	epatch \
-		"${FILESDIR}"/${PN}-4.8.1-autotools.patch \
+		"${FILESDIR}"/${P}-autotools.patch \
 		"${FILESDIR}"/${PN}-4.8.1-db-path.patch \
 		"${FILESDIR}"/${PN}-4.9.1.2-libdir.patch
 
