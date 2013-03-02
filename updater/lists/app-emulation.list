@@ -1,0 +1,9 @@
+emul-linux-86-baselibs
+fuse
+libguestfs
+libspectrum
+virt-manager
+virt-what
+wine
+xen-pvgrub
+xen-tools
