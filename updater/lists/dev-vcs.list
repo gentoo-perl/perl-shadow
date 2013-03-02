@@ -1,4 +1,11 @@
+archway
+cvs2cl
+cvsd
+cvsutils
+easygit
 git
+git-deploy
 gitolite
+gitolite-gentoo
+mr
 subversion
-svk
