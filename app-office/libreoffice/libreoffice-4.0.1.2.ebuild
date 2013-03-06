@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-office/libreoffice/libreoffice-9999-r2.ebuild,v 1.161 2013/03/05 14:21:48 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-office/libreoffice/libreoffice-4.0.1.2.ebuild,v 1.1 2013/03/06 12:27:01 scarabeus Exp $
 
 EAPI=5
 
@@ -35,15 +35,16 @@ HOMEPAGE="http://www.libreoffice.org"
 SRC_URI="branding? ( http://dev.gentoo.org/~dilfridge/distfiles/${BRANDING} )"
 [[ -n ${PATCHSET} ]] && SRC_URI+=" http://dev.gentooexperimental.org/~scarabeus/${PATCHSET}"
 
-# Split modules following git/tarballs
-# Core MUST be first!
 # Help is used for the image generator
+# We can also build translations and others if needed.
+# Core must be first
 MODULES="core help"
 # Only release has the tarballs
 if [[ ${PV} != *9999* ]]; then
 	for i in ${DEV_URI}; do
 		for mod in ${MODULES}; do
 			if [[ ${mod} == core ]]; then
+				# core is now packed without it in the name, git reponame stay
 				SRC_URI+=" ${i}/${P}.tar.xz"
 			else
 				SRC_URI+=" ${i}/${PN}-${mod}-${PV}.tar.xz"
@@ -89,7 +90,7 @@ unset lo_xt
 
 LICENSE="|| ( LGPL-3 MPL-1.1 )"
 SLOT="0"
-[[ ${PV} == *9999* ]] || KEYWORDS="~amd64 ~arm ~ppc ~x86 ~amd64-linux ~x86-linux"
+[[ ${PV} == *9999* ]] || KEYWORDS="~amd64 ~ppc ~x86 ~amd64-linux ~x86-linux"
 
 COMMON_DEPEND="
 	${PYTHON_DEPS}
@@ -227,6 +228,7 @@ DEPEND="${COMMON_DEPEND}
 PATCHES=(
 	# not upstreamable stuff
 	"${FILESDIR}/${PN}-3.7-system-pyuno.patch"
+	"${FILESDIR}/${PN}-3.7-separate-checks.patch"
 )
 
 REQUIRED_USE="
@@ -312,6 +314,8 @@ src_unpack() {
 
 src_prepare() {
 	# optimization flags
+	export ARCH_FLAGS="${CXXFLAGS}"
+	export LINKFLAGSOPTIMIZE="${LDFLAGS}"
 	export GMAKE_OPTIONS="${MAKEOPTS}"
 
 	# patchset
@@ -335,14 +339,6 @@ src_prepare() {
 		-e "s:%libdir%:$(get_libdir):g" \
 		-i pyuno/source/module/uno.py \
 		-i scripting/source/pyprov/officehelper.py || die
-	# sed in the tests
-	sed -i \
-		-e 's#all : build unitcheck#all : build#g' \
-		solenv/gbuild/Module.mk || die
-	sed -i \
-		-e 's#check: dev-install subsequentcheck#check: unitcheck slowcheck dev-install subsequentcheck#g' \
-		-e 's#Makefile.gbuild all slowcheck#Makefile.gbuild all#g' \
-		Makefile.in || die
 }
 
 src_configure() {
@@ -381,6 +377,7 @@ src_configure() {
 			--without-system-hsqldb
 			--with-ant-home="${ANT_HOME}"
 			--with-jdk-home=$(java-config --jdk-home 2>/dev/null)
+			--with-java-target-version=$(java-pkg_get-target)
 			--with-jvm-path="${EPREFIX}/usr/$(get_libdir)/"
 		"
 
@@ -421,9 +418,11 @@ src_configure() {
 	# --disable-gnome-vfs: old gnome virtual fs support
 	# --disable-kdeab: kde3 adressbook
 	# --disable-kde: kde3 support
+	# --disable-pch: precompiled headers cause build crashes
 	# --disable-rpath: relative runtime path is not desired
 	# --disable-systray: quickstarter does not actually work at all so do not
 	#   promote it
+	# --disable-zenity: disable build icon
 	# --enable-extension-integration: enable any extension integration support
 	# --without-{afms,fonts,myspell-dicts,ppsd}: prevent install of sys pkgs
 	# --disable-ext-report-builder: too much java packages pulled in
@@ -454,8 +453,10 @@ src_configure() {
 		--disable-kdeab \
 		--disable-kde \
 		--disable-online-update \
+		--disable-pch \
 		--disable-rpath \
 		--disable-systray \
+		--disable-zenity \
 		--with-alloc=$(use jemalloc && echo "jemalloc" || echo "system") \
 		--with-build-version="Gentoo official package" \
 		--enable-extension-integration \
@@ -472,6 +473,7 @@ src_configure() {
 		--without-afms \
 		--without-fonts \
 		--without-myspell-dicts \
+		--without-system-mozilla \
 		--without-help \
 		--with-helppack-integration \
 		--without-sun-templates \
