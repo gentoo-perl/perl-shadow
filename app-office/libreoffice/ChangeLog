@@ -1,6 +1,19 @@
 # ChangeLog for app-office/libreoffice
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/app-office/libreoffice/ChangeLog,v 1.446 2013/03/09 16:00:57 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-office/libreoffice/ChangeLog,v 1.449 2013/03/13 12:19:44 scarabeus Exp $
+
+  13 Mar 2013; Tomáš Chvátal <scarabeus@gentoo.org> libreoffice-9999-r2.ebuild:
+  Rename mysql connector to mariadb per upstream and do not define python var as
+  it is not needed.
+
+  13 Mar 2013; Tomáš Chvátal <scarabeus@gentoo.org> libreoffice-9999-r2.ebuild:
+  Add dependency over libmwaw.
+
+  12 Mar 2013; Andreas K. Huettel <dilfridge@gentoo.org>
+  libreoffice-3.6.9999.ebuild, libreoffice-4.0.0.3.ebuild,
+  libreoffice-4.0.1.2.ebuild, libreoffice-4.0.9999.ebuild,
+  libreoffice-9999-r2.ebuild:
+  Add subslot dependency on poppler wherever possible
 
   09 Mar 2013; Tomáš Chvátal <scarabeus@gentoo.org> libreoffice-4.0.1.2.ebuild,
   libreoffice-4.0.9999.ebuild:
