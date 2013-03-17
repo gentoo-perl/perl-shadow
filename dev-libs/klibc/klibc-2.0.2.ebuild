@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-libs/klibc/klibc-1.5.25.ebuild,v 1.6 2013/03/16 23:12:15 mpagano Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-libs/klibc/klibc-2.0.2.ebuild,v 1.1 2013/03/16 14:55:18 mpagano Exp $
 
 # Robin H. Johnson <robbat2@gentoo.org>, 12 Nov 2007:
 # This still needs major work.
@@ -16,29 +16,40 @@
 # This will be able to go away once the klibc author updates his code
 # to build again the headers provided by the kernel's 'headers_install' target.
 
+EAPI=5
+K_TARBALL_SUFFIX="xz"
+
 inherit eutils multilib toolchain-funcs
 
 DESCRIPTION="A minimal libc subset for use with initramfs."
 HOMEPAGE="http://www.zytor.com/mailman/listinfo/klibc"
-KV_MAJOR="2" KV_MINOR="6" KV_SUB="39"
+KV_MAJOR="3" KV_MINOR="x" KV_SUB="2"
 PKV_EXTRA=""
-if [ -n "${PKV_EXTRA}" ]; then
-	PKV="${KV_MAJOR}.${KV_MINOR}.$((${KV_SUB}+1))-${PKV_EXTRA}"
-	PATCH_URI="mirror://kernel/linux/kernel/v${KV_MAJOR}.${KV_MINOR}/patch-${PKV}.bz2"
+if [[ ${PKV_EXTRA} ]]; then
+	if [[ ${KV_MAJOR} == 2 ]]; then
+		PKV="${KV_MAJOR}.${KV_MINOR}.$((${KV_SUB}+1))-${PKV_EXTRA}"
+	else
+		PKV="${KV_MAJOR}.$((${KV_SUB}+1))-${PKV_EXTRA}"
+	fi
+	PATCH_URI="mirror://kernel/linux/kernel/v${KV_MAJOR}.${KV_MINOR}/patch-${PKV}.${K_TARBALL_SUFFIX}"
 fi
-OKV="${KV_MAJOR}.${KV_MINOR}.${KV_SUB}"
+if [[ ${KV_MAJOR} == 2 ]]; then
+	OKV="${KV_MAJOR}.${KV_MINOR}.${KV_SUB}"
+else
+	OKV="${KV_MAJOR}.${KV_SUB}"
+fi
 KERNEL_URI="
-	mirror://kernel/linux/kernel/v${KV_MAJOR}.${KV_MINOR}/linux-${OKV}.tar.bz2
-	mirror://kernel/linux/kernel/v${KV_MAJOR}.${KV_MINOR}/testing/linux-${OKV}.tar.bz2"
+	mirror://kernel/linux/kernel/v${KV_MAJOR}.${KV_MINOR}/linux-${OKV}.tar.${K_TARBALL_SUFFIX}
+	mirror://kernel/linux/kernel/v${KV_MAJOR}.${KV_MINOR}/testing/linux-${OKV}.tar.${K_TARBALL_SUFFIX}"
 SRC_URI="
-	mirror://kernel/linux/libs/klibc/${PV:0:3}/${P}.tar.bz2
+	mirror://kernel/linux/libs/klibc/${PV:0:3}/${P}.tar.${K_TARBALL_SUFFIX}
 	${PATCH_URI}
 	${KERNEL_URI}"
 
 LICENSE="|| ( GPL-2 LGPL-2 )"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 -mips ~ppc ~ppc64 ~sparc ~x86"
 SLOT="0"
-IUSE="debug"
+IUSE="debug test"
 
 DEPEND="dev-lang/perl"
 RDEPEND="${DEPEND}"
@@ -76,8 +87,8 @@ kernel_defconfig() {
 }
 
 src_unpack() {
-	unpack linux-${OKV}.tar.bz2 ${P}.tar.bz2
-	[ -n "${PKV}" ] && EPATCH_OPTS="-d ${KS} -p1" epatch "${DISTDIR}"/patch-${PKV}.bz2
+	unpack linux-${OKV}.tar.${K_TARBALL_SUFFIX} ${P}.tar.${K_TARBALL_SUFFIX}
+	[[ ${PKV} ]] && EPATCH_OPTS="-d ${KS} -p1" epatch "${DISTDIR}"/patch-${PKV}.${K_TARBALL_SUFFIX}
 	cd "${S}"
 
 	# Symlink /usr/src/linux to ${S}/linux
@@ -111,7 +122,9 @@ src_compile() {
 	# TODO: For cross-compiling
 	# You should set ARCH and ABI here
 	CC="$(tc-getCC)"
+	LD="$(tc-getLD)"
 	HOSTCC="$(tc-getBUILD_CC)"
+	HOSTLD="$(tc-getBUILD_LD)"
 	KLIBCARCH="$(klibc_arch ${ARCH})"
 	KLIBCASMARCH="$(kernel_asm_arch ${ARCH})"
 	libdir="$(get_libdir)"
@@ -146,6 +159,7 @@ src_compile() {
 		EXTRA_KLIBCAFLAGS="-Wa,--noexecstack" \
 		EXTRA_KLIBCLDFLAGS="-z noexecstack" \
 		HOSTCC="${HOSTCC}" CC="${CC}" \
+		HOSTLD="${HOSTLD}" LD="${LD}" \
 		INSTALLDIR="/usr/${libdir}/klibc" \
 		KLIBCARCH=${KLIBCARCH} \
 		KLIBCASMARCH=${KLIBCASMARCH} \
@@ -214,6 +228,8 @@ src_install() {
 	# on a particular system, might be due to inherited permissions from parent
 	# directory
 	find "${D}"/usr/${libdir}/klibc/include | xargs chmod o+rX
+	find "${D}"/usr/${libdir}/klibc/include -type f \
+		\( -name '.install' -o -name '..install.cmd' \) -delete || die
 
 	# Hardlinks becoming copies
 	for x in gunzip zcat ; do
