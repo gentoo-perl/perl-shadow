@@ -1,8 +1,8 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/linuxdoc-tools/linuxdoc-tools-0.9.68.ebuild,v 1.2 2013/03/21 07:09:04 pinkbyte Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/linuxdoc-tools/linuxdoc-tools-0.9.68-r1.ebuild,v 1.1 2013/03/21 12:54:43 pinkbyte Exp $
 
-EAPI=2
+EAPI=5
 
 inherit eutils sgml-catalog toolchain-funcs
 
@@ -14,13 +14,11 @@ LICENSE="MIT SGMLUG"
 SLOT="0"
 KEYWORDS="~amd64 ~ia64 ~ppc ~x86 ~x86-fbsd"
 
-IUSE=""
-
 DEPEND="app-text/openjade
 	app-text/opensp
 	app-text/sgml-common
 	dev-texlive/texlive-fontsrecommended
-	>=dev-lang/perl-5.004
+	dev-lang/perl
 	sys-apps/gawk
 	sys-apps/groff
 	virtual/latex-base"
@@ -45,11 +43,11 @@ src_prepare() {
 
 src_configure() {
 	tc-export CC
-	econf --with-installed-iso-entities || die "./configure failed"
+	econf --with-installed-iso-entities
 }
 
 src_compile() {
-	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" || die "Compilation failed"
+	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
 }
 
 src_install() {
@@ -61,13 +59,14 @@ src_install() {
 	export SGML_CATALOG_FILES="/usr/share/sgml/sgml-iso-entities-8879.1986/catalog"
 
 	eval `perl -V:installvendorarch`
-	einstall \
-		perl5libdir="${D}${installvendorarch}" \
-		LINUXDOCDOC="${D}/usr/share/doc/${PF}/guide" \
-		|| die "Installation failed"
+	emake \
+		DESTDIR="${D}" \
+		perl5libdir="${installvendorarch}" \
+		LINUXDOCDOC="/usr/share/doc/${PF}/guide" \
+		install
 
 	insinto /usr/share/texmf/tex/latex/misc
-	doins tex/*.sty || die
+	doins tex/*.sty
 
-	dodoc ChangeLog README || die
+	dodoc ChangeLog README
 }
