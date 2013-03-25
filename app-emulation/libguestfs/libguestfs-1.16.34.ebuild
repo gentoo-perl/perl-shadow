@@ -1,16 +1,13 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/libguestfs/libguestfs-1.18.10.ebuild,v 1.1 2012/11/26 18:36:15 maksbotan Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/libguestfs/libguestfs-1.16.34.ebuild,v 1.1 2013/03/25 12:15:48 maksbotan Exp $
 
-EAPI="4"
-
-APLANCE_PV="1.18.9"
-APPL_P="appliance-${APLANCE_PV}"
+EAPI="5"
 
 AUTOTOOLS_AUTORECONF=1
 AUTOTOOLS_IN_SOURCE_BUILD=1
 
-inherit check-reqs bash-completion-r1 autotools-utils versionator eutils \
+inherit bash-completion-r1 autotools-utils versionator eutils \
 multilib linux-info perl-module
 
 MY_PV_1="$(get_version_component_range 1-2)"
@@ -20,27 +17,23 @@ MY_PV_2="$(get_version_component_range 2)"
 
 DESCRIPTION="Tools for accessing, inspect  and modifying virtual machine (VM) disk images"
 HOMEPAGE="http://libguestfs.org/"
-SRC_URI="http://libguestfs.org/download/${MY_PV_1}-${SD}/${P}.tar.gz
-	http://dev.gentoo.org/~maksbotan/${APPL_P}.tar.xz"
+SRC_URI="http://libguestfs.org/download/${MY_PV_1}-${SD}/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2"
-SLOT="0"
+SLOT="0/${MY_PV_1}"
 # Upstream NOT supported 32-bit version, keyword in own risk
 KEYWORDS="~amd64"
-IUSE="bash-completion erlang +fuse debug ocaml doc +perl ruby static-libs
-selinux systemtap introspection inspect-icons"
+IUSE="erlang +fuse debug +ocaml doc +perl nls ruby static-libs selinux systemtap introspection"
 
 # Failires - doc
 
 COMMON_DEPEND="
-	sys-libs/ncurses
-	sys-devel/gettext
 	>=app-misc/hivex-1.3.1
 	dev-libs/libpcre
 	app-arch/cpio
 	dev-lang/perl
 	app-cdr/cdrkit
-	>=app-emulation/qemu-1.0[qemu_user_targets_x86_64,qemu_softmmu_targets_x86_64,tci,systemtap?]
+	>=app-emulation/qemu-1.0[qemu_user_targets_x86_64,qemu_softmmu_targets_x86_64]
 	sys-apps/fakeroot
 	sys-apps/file
 	app-emulation/libvirt
@@ -69,26 +62,21 @@ COMMON_DEPEND="
 	systemtap? ( dev-util/systemtap )
 	ocaml? ( dev-lang/ocaml[ocamlopt] dev-ml/findlib[ocamlopt] )
 	erlang? ( dev-lang/erlang )
-	inspect-icons? ( media-libs/netpbm
-			media-gfx/icoutils )
 	"
 
 DEPEND="${COMMON_DEPEND}
+	sys-apps/sed
 	dev-util/gperf
 	doc? ( app-text/po4a )
 	ruby? ( dev-lang/ruby virtual/rubygems dev-ruby/rake )
 	"
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	app-emulation/libguestfs-appliance
+	"
 
-PATCHES=("${FILESDIR}"/1.18/0*.patch  )
+PATCHES=("${FILESDIR}"/1.18/*.patch  )
 
 DOCS=(AUTHORS BUGS HACKING README RELEASE-NOTES ROADMAP TODO)
-
-pkg_pretend() {
-	CHECKREQS_DISK_BUILD="5G"
-	CHECKREQS_DISK_USR="5G"
-	check-reqs_pkg_pretend
-}
 
 pkg_setup () {
 		CONFIG_CHECK="~KVM ~VIRTIO"
@@ -118,7 +106,9 @@ src_configure() {
 		--with-readline
 		--disable-php
 		--disable-python
-		--without-java
+		--disable-java
+		--with-java-home=no
+		$(use_enable nls)
 		$(use_enable perl)
 		$(use_enable fuse)
 		$(use_enable ocaml)
@@ -127,7 +117,6 @@ src_configure() {
 		$(use_enable doc)
 		$(use_enable introspection gobject)
 		$(use_enable erlang)
-		$(use_enable systemtap probes)
 	)
 	autotools-utils_src_configure
 }
@@ -145,12 +134,10 @@ src_install() {
 	strip-linguas -i po
 	autotools-utils_src_install "LINGUAS=""${LINGUAS}"""
 
-	use bash-completion && dobashcomp "${D}/etc"/bash_completion.d/guestfish-bash-completion.sh
+	dobashcomp "${D}/etc"/bash_completion.d/guestfish-bash-completion.sh
 
 	rm -fr "${D}/etc"/bash* || die
 
-	insinto /usr/share/guestfs/
-	doins -r "${WORKDIR}"/appliance
 	newenvd "${FILESDIR}"/env.file 99"${PN}"
 
 	use perl && fixlocalpod

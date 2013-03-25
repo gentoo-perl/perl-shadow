@@ -1,16 +1,13 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/libguestfs/libguestfs-1.18.9.ebuild,v 1.1 2012/10/28 18:16:49 maksbotan Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/libguestfs/libguestfs-1.18.11.ebuild,v 1.1 2013/03/25 12:15:48 maksbotan Exp $
 
-EAPI="4"
-
-APLANCE_PV="1.18.5"
-APPL_P="appliance-${APLANCE_PV}"
+EAPI="5"
 
 AUTOTOOLS_AUTORECONF=1
 AUTOTOOLS_IN_SOURCE_BUILD=1
 
-inherit check-reqs bash-completion-r1 autotools-utils versionator eutils \
+inherit bash-completion-r1 autotools-utils versionator eutils \
 multilib linux-info perl-module
 
 MY_PV_1="$(get_version_component_range 1-2)"
@@ -20,14 +17,13 @@ MY_PV_2="$(get_version_component_range 2)"
 
 DESCRIPTION="Tools for accessing, inspect  and modifying virtual machine (VM) disk images"
 HOMEPAGE="http://libguestfs.org/"
-SRC_URI="http://libguestfs.org/download/${MY_PV_1}-${SD}/${P}.tar.gz
-	http://dev.gentoo.org/~maksbotan/${APPL_P}.tar.xz"
+SRC_URI="http://libguestfs.org/download/${MY_PV_1}-${SD}/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2"
-SLOT="0"
+SLOT="0/${MY_PV_1}"
 # Upstream NOT supported 32-bit version, keyword in own risk
 KEYWORDS="~amd64"
-IUSE="bash-completion erlang +fuse debug ocaml doc +perl ruby static-libs
+IUSE="erlang +fuse debug ocaml doc +perl ruby static-libs
 selinux systemtap introspection inspect-icons"
 
 # Failires - doc
@@ -78,17 +74,13 @@ DEPEND="${COMMON_DEPEND}
 	doc? ( app-text/po4a )
 	ruby? ( dev-lang/ruby virtual/rubygems dev-ruby/rake )
 	"
-RDEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
+	app-emulation/libguestfs-appliance
+	"
 
 PATCHES=("${FILESDIR}"/1.18/0*.patch  )
 
 DOCS=(AUTHORS BUGS HACKING README RELEASE-NOTES ROADMAP TODO)
-
-pkg_pretend() {
-	CHECKREQS_DISK_BUILD="5G"
-	CHECKREQS_DISK_USR="5G"
-	check-reqs_pkg_pretend
-}
 
 pkg_setup () {
 		CONFIG_CHECK="~KVM ~VIRTIO"
@@ -145,12 +137,10 @@ src_install() {
 	strip-linguas -i po
 	autotools-utils_src_install "LINGUAS=""${LINGUAS}"""
 
-	use bash-completion && dobashcomp "${D}/etc"/bash_completion.d/guestfish-bash-completion.sh
+	dobashcomp "${D}/etc"/bash_completion.d/guestfish-bash-completion.sh
 
 	rm -fr "${D}/etc"/bash* || die
 
-	insinto /usr/share/guestfs/
-	doins -r "${WORKDIR}"/appliance
 	newenvd "${FILESDIR}"/env.file 99"${PN}"
 
 	use perl && fixlocalpod
