@@ -1,6 +1,16 @@
 # ChangeLog for dev-perl/Sys-Virt
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/Sys-Virt/ChangeLog,v 1.19 2013/03/10 18:08:24 maksbotan Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/Sys-Virt/ChangeLog,v 1.22 2013/03/28 12:38:15 pinkbyte Exp $
+
+  28 Mar 2013; Sergey Popov <pinkbyte@gentoo.org> -Sys-Virt-0.9.11.ebuild,
+  -Sys-Virt-0.9.12.ebuild, -Sys-Virt-0.9.13.ebuild, -Sys-Virt-0.10.2.ebuild:
+  Drop old unstable versions due to maintainer's request
+
+  28 Mar 2013; Sergey Popov <pinkbyte@gentoo.org> Sys-Virt-1.0.3.ebuild:
+  Add dev-perl/CPAN-Changes to dependencies, needed for tests
+
+  28 Mar 2013; Sergey Popov <pinkbyte@gentoo.org> Sys-Virt-1.0.0.ebuild:
+  Stable on amd64, wrt bug #463520
 
 *Sys-Virt-1.0.3 (10 Mar 2013)
 
