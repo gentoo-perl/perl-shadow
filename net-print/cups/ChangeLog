@@ -1,6 +1,20 @@
 # ChangeLog for net-print/cups
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.526 2013/03/24 21:59:55 dilfridge Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.529 2013/04/01 22:51:09 dilfridge Exp $
+
+  01 Apr 2013; Andreas K. Huettel <dilfridge@gentoo.org> -cups-1.6.1.ebuild,
+  -cups-1.6.2.ebuild:
+  Clean up
+
+  01 Apr 2013; Andreas K. Huettel <dilfridge@gentoo.org> cups-1.6.2-r1.ebuild,
+  cups-9999.ebuild:
+  Remove avahi useflag, use only zeroconf useflag for full avahi interface
+
+*cups-1.6.2-r1 (01 Apr 2013)
+
+  01 Apr 2013; Andreas K. Huettel <dilfridge@gentoo.org> +cups-1.6.2-r1.ebuild,
+  +files/cups-1.6.2-statedir.patch, cups-9999.ebuild, +files/cupsd.init.d-r1:
+  Move /var/run/cups to /run/cups, bug 451756
 
   24 Mar 2013; Andreas K. Huettel <dilfridge@gentoo.org> cups-1.6.2.ebuild,
   cups-9999.ebuild:
