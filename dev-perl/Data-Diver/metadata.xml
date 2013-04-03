@@ -14,7 +14,7 @@
 		<description>Proxy maintainer. CC him on bugs</description>
 	</maintainer>
 	<upstream>
-		<remote-id type="cpan">Roman</remote-id>
-		<remote-id type="cpan-module">Roman</remote-id>
+		<remote-id type="cpan">Data-Diver</remote-id>
+		<remote-id type="cpan-module">Data::Diver</remote-id>
 	</upstream>
 </pkgmetadata>
