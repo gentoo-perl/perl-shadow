@@ -1,11 +1,11 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-text/texlive-core/texlive-core-2012-r1.ebuild,v 1.12 2013/04/21 12:15:15 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-text/texlive-core/texlive-core-2012-r1.ebuild,v 1.15 2013/04/22 08:03:42 ago Exp $
 
 EAPI=5
 
 #TL_UPSTREAM_PATCHLEVEL="1"
-PATCHLEVEL="38"
+PATCHLEVEL="39"
 TL_SOURCE_VERSION=20120701
 
 inherit eutils flag-o-matic toolchain-funcs libtool texlive-common
@@ -64,7 +64,7 @@ for i in ${TL_CORE_EXTRA_SRC_MODULES}; do
 done
 SRC_URI="${SRC_URI} )"
 
-KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd"
+KEYWORDS="alpha amd64 arm hppa ia64 ~mips ppc ppc64 s390 ~sh sparc x86 ~amd64-fbsd ~x86-fbsd"
 IUSE="cjk X doc source tk xetex"
 
 MODULAR_X_DEPEND="X? (
