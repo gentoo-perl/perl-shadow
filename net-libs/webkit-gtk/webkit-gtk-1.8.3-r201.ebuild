@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.8.3-r201.ebuild,v 1.1 2013/04/11 21:41:39 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-1.8.3-r201.ebuild,v 1.3 2013/05/01 03:40:59 tetromino Exp $
 
 EAPI=5
 
@@ -68,7 +68,7 @@ S="${WORKDIR}/${MY_P}"
 CHECKREQS_DISK_BUILD="18G" # and even this might not be enough, bug #417307
 
 pkg_pretend() {
-	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" ; then
+	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" && ! is-flagq "-g*0" ; then
 		einfo "Checking for sufficient disk space to build ${PN} with debugging CFLAGS"
 		check-reqs_pkg_pretend
 	fi
@@ -76,7 +76,7 @@ pkg_pretend() {
 
 pkg_setup() {
 	# Check whether any of the debugging flags is enabled
-	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" ; then
+	if [[ ${MERGE_TYPE} != "binary" ]] && is-flagq "-g*" && ! is-flagq "-g*0" ; then
 		if is-flagq "-ggdb" && [[ ${WEBKIT_GTK_GGDB} != "yes" ]]; then
 			replace-flags -ggdb -g
 			ewarn "Replacing \"-ggdb\" with \"-g\" in your CFLAGS."
@@ -174,6 +174,10 @@ src_prepare() {
 
 	# Respect CC, otherwise fails on prefix #395875
 	tc-export CC
+
+	# AM_PROG_CC_STDC is obsolete with sys-devel/automake-1.13.1, #467244
+	sed -i -e 's/AM_PROG_CC_STDC/AM_PROG_CC/g' aclocal.m4 || die
+	sed -i -e '/AM_PROG_CC_STDC/d' configure.ac || die
 
 	# Prevent maintainer mode from being triggered during make
 	AT_M4DIR=Source/autotools eautoreconf

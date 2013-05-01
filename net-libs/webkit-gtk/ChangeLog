@@ -1,6 +1,27 @@
 # ChangeLog for net-libs/webkit-gtk
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/ChangeLog,v 1.199 2013/04/27 12:23:02 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/ChangeLog,v 1.203 2013/05/01 09:31:28 pacho Exp $
+
+  01 May 2013; Pacho Ramos <pacho@gentoo.org> -webkit-gtk-2.0.0.ebuild,
+  webkit-gtk-2.0.1.ebuild:
+  Workaround to paludis behavior is no longer needed (#406117#c26 by Ulm and
+  mgorny), drop old.
+
+  01 May 2013; Alexandre Rostovtsev <tetromino@gentoo.org>
+  webkit-gtk-1.8.3-r200.ebuild, webkit-gtk-1.8.3-r201.ebuild,
+  webkit-gtk-1.8.3-r300.ebuild, webkit-gtk-1.10.2-r300.ebuild,
+  webkit-gtk-2.0.0.ebuild, webkit-gtk-2.0.1.ebuild:
+  Don't treat -g0 as a debugging flag (bug #465406, thanks to Tom Wijsman and
+  Agostino Sarubbo).
+
+  30 Apr 2013; Sergei Trofimovich <slyfox@gentoo.org>
+  webkit-gtk-1.8.3-r201.ebuild:
+  Backport build fix to slot:2 for automake-1.13.1 (bug #467244).
+
+  30 Apr 2013; Justin Lecher <jlec@gentoo.org> webkit-gtk-1.10.2-r300.ebuild,
+  metadata.xml:
+  Add compatibility for sys-devel/automake-1.13.1, #467244, thanks Lee Trager
+  for the patch
 
 *webkit-gtk-2.0.1 (27 Apr 2013)
 
