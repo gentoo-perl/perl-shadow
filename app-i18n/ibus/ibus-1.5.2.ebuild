@@ -1,15 +1,15 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-i18n/ibus/ibus-1.4.99.20121006.ebuild,v 1.4 2013/01/06 09:15:15 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-i18n/ibus/ibus-1.5.2.ebuild,v 1.1 2013/05/04 06:48:01 naota Exp $
 
-EAPI=4
-PYTHON_DEPEND="python? 2:2.5"
+EAPI=5
+PYTHON_COMPAT=( python{2_5,2_6,2_7} )
 VALA_MIN_API_VERSION="0.18"
 VALA_USE_DEPEND="vapigen"
 # Vapigen is needed for the vala binding
 # Valac is needed when building from git for the engine
 
-inherit eutils gnome2-utils multilib python vala virtualx
+inherit bash-completion-r1 eutils gnome2-utils multilib python-single-r1 vala virtualx
 
 DESCRIPTION="Intelligent Input Bus for Linux / Unix OS"
 HOMEPAGE="http://code.google.com/p/ibus/"
@@ -23,7 +23,8 @@ REQUIRED_USE="|| ( gtk gtk3 X )
 	deprecated? ( python )
 	python? ( || ( deprecated ( gtk3 introspection ) ) )" #342903
 
-COMMON_DEPEND=">=dev-libs/glib-2.26:2
+COMMON_DEPEND="
+	>=dev-libs/glib-2.26:2
 	gnome-base/librsvg:2
 	sys-apps/dbus[X?]
 	app-text/iso-codes
@@ -32,6 +33,7 @@ COMMON_DEPEND=">=dev-libs/glib-2.26:2
 	gconf? ( >=gnome-base/gconf-2.12:2 )
 	gtk? ( x11-libs/gtk+:2 )
 	gtk3? ( x11-libs/gtk+:3 )
+	python? ( ${PYTHON_DEPS} )
 	X? (
 		x11-libs/libX11
 		x11-libs/gtk+:2 )
@@ -56,7 +58,8 @@ DEPEND="${COMMON_DEPEND}
 	dev-util/intltool
 	virtual/pkgconfig
 	nls? ( >=sys-devel/gettext-0.16.1 )
-	vala? ( $(vala_depend) )"
+	vala? ( $(vala_depend) )
+	gnome-base/gconf"
 
 # stress test in bus/ fails
 # IBUS-CRITICAL **: bus_test_client_init: assertion `ibus_bus_is_connected (_bus)' failed
@@ -65,25 +68,21 @@ RESTRICT="test"
 DOCS="AUTHORS ChangeLog NEWS README"
 
 pkg_setup() {
-	if use python; then
-		python_set_active_version 2
-		python_pkg_setup
-	fi
+	use python && python-single-r1_pkg_setup
 }
 
 src_prepare() {
 	# We run "dconf update" in pkg_postinst/postrm to avoid sandbox violations
 	sed -e 's/dconf update/$(NULL)/' \
 		-i data/dconf/Makefile.{am,in} || die
-	use python && python_clean_py-compile_files
 	use vala && vala_src_prepare
+	cp "${S}"/client/gtk2/ibusimcontext.c "${S}"/client/gtk3/ibusimcontext.c || die
 }
 
 src_configure() {
 	local python_conf
 	if use python; then
-		# We cannot call $(PYTHON) if we haven't called python_pkg_setup
-		python_conf="PYTHON=$(PYTHON)
+		python_conf="PYTHON=${PYTHON}
 			$(use_enable deprecated python-library)
 			$(use_enable gtk3 setup)"
 	else
@@ -99,8 +98,8 @@ src_configure() {
 		$(use_enable gtk3 ui) \
 		$(use_enable nls) \
 		$(use_enable test tests) \
-		$(use_enable vala) \
 		$(use_enable X xim) \
+		$(use_enable vala) \
 		${python_conf}
 }
 
@@ -112,12 +111,17 @@ src_test() {
 src_install() {
 	default
 
-	find "${ED}" -name '*.la' -exec rm -f {} +
+	prune_libtool_files --all
 
+	newbashcomp "${ED}"/usr/share/bash-completion/completions/ibus.bash ${PN}
+	rm -rf "${ED}"/usr/share/bash-completion/completions/ || die
 	insinto /etc/X11/xinit/xinput.d
 	newins xinput-ibus ibus.conf
 
 	keepdir /usr/share/ibus/{engine,icons} #289547
+
+	use deprecated && python_optimize
+	use python && use gtk3 && python_optimize
 }
 
 pkg_preinst() {
@@ -134,8 +138,6 @@ pkg_postinst() {
 	use gconf && gnome2_gconf_install
 	use gtk && gnome2_query_immodules_gtk2
 	use gtk3 && gnome2_query_immodules_gtk3
-	use deprecated && python_mod_optimize ${PN}
-	use python && use gtk3 && python_mod_optimize /usr/share/${PN}
 	gnome2_icon_cache_update
 
 	elog "To use ibus, you should:"
@@ -164,7 +166,5 @@ pkg_postrm() {
 	fi
 	use gtk && gnome2_query_immodules_gtk2
 	use gtk3 && gnome2_query_immodules_gtk3
-	use deprecated && python_mod_cleanup ${PN}
-	use python && use gtk3 && python_mod_cleanup /usr/share/${PN}
 	gnome2_icon_cache_update
 }
