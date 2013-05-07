@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/pkgconfig-openbsd/pkgconfig-openbsd-20130225.ebuild,v 1.2 2013/03/05 12:27:29 ssuominen Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-util/pkgconfig-openbsd/pkgconfig-openbsd-20130507.ebuild,v 1.1 2013/05/07 13:59:14 ssuominen Exp $
 
 EAPI=5
 
@@ -15,8 +15,7 @@ SRC_URI="http://dev.gentoo.org/~ssuominen/${P}.tar.xz
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS=""
-#KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="+pkg-config"
 
 DEPEND="
@@ -28,11 +27,16 @@ RDEPEND="${DEPEND}
 	dev-lang/perl
 	virtual/perl-Getopt-Long"
 
-S=${WORKDIR}/${P}/src
+S=${WORKDIR}/src
 
 src_prepare() {
 	# Config.pm from dev-lang/perl doesn't set ARCH, only archname
 	sed -i -e '/Config/s:ARCH:archname:' usr.bin/pkg-config/pkg-config || die
+
+	sed -i \
+		-e 's:/usr/X11R6/lib/pkgconfig:/usr/share/pkgconfig:' \
+		-e 's:/usr/X11R6/share/pkgconfig:/usr/lib64/pkgconfig\n/usr/lib32/pkgconfig:' \
+		usr.bin/pkg-config/pkg-config || die
 }
 
 src_install() {
