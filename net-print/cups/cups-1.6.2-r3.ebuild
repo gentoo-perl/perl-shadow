@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-9999.ebuild,v 1.34 2013/05/14 18:44:48 dilfridge Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/cups-1.6.2-r3.ebuild,v 1.4 2013/05/14 16:04:04 scarabeus Exp $
 
 EAPI=5
 
@@ -54,7 +54,7 @@ RDEPEND="
 		)
 		!gnutls? ( >=dev-libs/openssl-0.9.8g )
 	)
-	usb? ( virtual/libusb:1 )
+	usb? ( virtual/libusb:0 )
 	X? ( x11-misc/xdg-utils )
 	xinetd? ( sys-apps/xinetd )
 	zeroconf? ( net-dns/avahi )
@@ -160,11 +160,11 @@ src_configure() {
 	fi
 
 	econf \
-		--libdir="${EPREFIX}"/usr/$(get_libdir) \
-		--localstatedir="${EPREFIX}"/var \
+		--libdir=/usr/$(get_libdir) \
+		--localstatedir=/var \
 		--with-cups-user=lp \
 		--with-cups-group=lp \
-		--with-docdir="${EPREFIX}"/usr/share/cups/html \
+		--with-docdir=/usr/share/cups/html \
 		--with-languages="${LINGUAS}" \
 		--with-system-groups=lpadmin \
 		$(use_enable acl) \
@@ -189,9 +189,9 @@ src_configure() {
 
 	# install in /usr/libexec always, instead of using /usr/lib/cups, as that
 	# makes more sense when facing multilib support.
-	sed -i -e "s:SERVERBIN.*:SERVERBIN = \"\$\(BUILDROOT\)${EPREFIX}/usr/libexec/cups\":" Makedefs || die
-	sed -i -e "s:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN \"${EPREFIX}/usr/libexec/cups\":" config.h || die
-	sed -i -e "s:cups_serverbin=.*:cups_serverbin=\"${EPREFIX}/usr/libexec/cups\":" cups-config || die
+	sed -i -e 's:SERVERBIN.*:SERVERBIN = "$(BUILDROOT)"/usr/libexec/cups:' Makedefs || die
+	sed -i -e 's:#define CUPS_SERVERBIN.*:#define CUPS_SERVERBIN "/usr/libexec/cups":' config.h || die
+	sed -i -e 's:cups_serverbin=.*:cups_serverbin=/usr/libexec/cups:' cups-config || die
 }
 
 src_install() {
@@ -253,9 +253,9 @@ src_install() {
 
 	# for the special case of running lprng and cups together, bug 467226
 	if use lprng-compat ; then
-		rm -fv "${ED}"/usr/bin/{lp*,cancel}
+		rm -fv "${ED}"/usr/bin/lp*
 		rm -fv "${ED}"/usr/sbin/lp*
-		rm -fv "${ED}"/usr/share/man/man1/{lp*,cancel*}
+		rm -fv "${ED}"/usr/share/man/man1/lp*
 		rm -fv "${ED}"/usr/share/man/man8/lp*
 		ewarn "Not installing lp... binaries, since the lprng-compat useflag is set."
 		ewarn "Unless you plan to install an exotic server setup, you most likely"
@@ -292,15 +292,8 @@ pkg_postinst() {
 		echo
 		elog "Starting with net-print/cups-filters-1.0.30, that package provides"
 		elog "a daemon cups-browsed which implements printer discovery via the"
-		elog "CUPS-1.5 protocol."
+		elog "Cups-1.5 protocol. Not much tested so far though."
 		echo
-	fi
-
-	if [[ "${REPLACING_VERSIONS}" == "1.6.2-r4" ]]; then
-		ewarn
-		ewarn "You are upgrading from the broken version net-print/cups-1.6.2-r4."
-		ewarn "Please rebuild net-print/cups-filters now to make sure everything is OK."
-		ewarn
 	fi
 }
 
