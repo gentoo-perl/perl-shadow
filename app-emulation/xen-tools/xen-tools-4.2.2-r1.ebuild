@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.2.1-r1.ebuild,v 1.9 2013/05/15 17:47:47 idella4 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.2.2-r1.ebuild,v 1.2 2013/05/16 05:26:22 idella4 Exp $
 
 EAPI=5
 
@@ -32,17 +32,18 @@ DOCS=( README docs/README.xen-bugtool )
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="api custom-cflags debug doc flask hvm qemu ocaml pygrub screen static-libs xend"
+IUSE="api custom-cflags debug doc flask hvm qemu pygrub screen static-libs xend"
 
 REQUIRED_USE="hvm? ( qemu )"
 
-CDEPEND="dev-libs/yajl
+CDEPEND="dev-libs/lzo:2
+	dev-libs/yajl
 	dev-python/lxml[${PYTHON_USEDEP}]
 	dev-python/pypam[${PYTHON_USEDEP}]
 	dev-python/pyxml[${PYTHON_USEDEP}]
 	sys-libs/zlib
 	sys-power/iasl
-	ocaml? ( dev-ml/findlib )
+	dev-ml/findlib
 	hvm? ( media-libs/libsdl )
 	${PYTHON_DEPS}
 	api? ( dev-libs/libxml2
@@ -72,7 +73,6 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	sys-apps/iproute2
 	net-misc/bridge-utils
-	ocaml? ( >=dev-lang/ocaml-3.12.0 )
 	screen? (
 		app-misc/screen
 		app-admin/logrotate
@@ -193,8 +193,16 @@ src_prepare() {
 	# fix jobserver in Makefile
 	epatch "${FILESDIR}"/${PN/-tools/}-4.2.0-jserver.patch
 
+	# add missing header
+	epatch "${FILESDIR}"/xen-4-ulong.patch \
+		"${FILESDIR}"/${PN}-4.2-xen_disk_leak.patch
+
 	#Sec patch, currently valid
-	epatch "${FILESDIR}"/xen-4-CVE-2012-6075-XSA-41.patch
+	epatch "${FILESDIR}"/xen-4-CVE-2012-6075-XSA-41.patch \
+		"${FILESDIR}"/xen-4-CVE-2013-1922-XSA-48.patch \
+		"${FILESDIR}"/xen-4-CVE-2013-1952-XSA-49.patch
+
+	epatch_user
 }
 
 src_compile() {
