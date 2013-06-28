@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.2.1-r4.ebuild,v 1.3 2013/06/27 13:21:11 idella4 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.2.1-r4.ebuild,v 1.5 2013/06/28 11:42:53 idella4 Exp $
 
 EAPI=5
 
@@ -199,6 +199,9 @@ src_prepare() {
 	epatch "${FILESDIR}"/xen-4-ulong.patch \
 		"${FILESDIR}"/${PN}-4.2-xen_disk_leak.patch
 
+	# Set dom0-min-mem to kb; Bug #472982
+	epatch "${FILESDIR}"/${PN/-tools/}-4.2-configsxp.patch
+
 	#Sec patches currently valid
 	epatch "${FILESDIR}"/xen-4-CVE-2012-6075-XSA-41.patch \
 		"${FILESDIR}"/xen-4-CVE-2013-0215-XSA-38.patch \
@@ -222,6 +225,8 @@ src_prepare() {
                 "${FILESDIR}"/xen-4.2-CVE-2013-20to23-XSA-55.patch \
 		"${FILESDIR}"/xen-4-CVE-2013-2072-XSA-56.patch \
 		"${FILESDIR}"/xen-4.2-CVE-XSA-57.patch
+
+		epatch_user
 }
 
 src_compile() {
@@ -295,8 +300,8 @@ src_install() {
 	fi
 
 	if use qemu; then
-		mkdir -p "${D}"usr/lib64/xen/bin || die
-		mv "${D}"usr/lib/xen/bin/qemu* "${D}"usr/lib64/xen/bin/ || die
+		mkdir -p "${D}"usr/$(get_libdir)/xen/bin || die
+		mv "${D}"usr/lib/xen/bin/qemu* "${D}"usr/$(get_libdir)/xen/bin/ || die
 	fi
 
 	# For -static-libs wrt Bug 384355
