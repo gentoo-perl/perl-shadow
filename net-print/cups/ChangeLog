@@ -1,6 +1,41 @@
 # ChangeLog for net-print/cups
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.547 2013/07/07 15:16:39 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-print/cups/ChangeLog,v 1.554 2013/07/13 06:03:01 patrick Exp $
+
+  13 Jul 2013; Patrick Lauer <patrick@gentoo.org> metadata.xml:
+  Remove unneeded useflag description from metadata.xml
+
+*cups-1.6.3-r1 (12 Jul 2013)
+
+  12 Jul 2013; Andreas K. Huettel <dilfridge@gentoo.org> -cups-1.6.3.ebuild,
+  +cups-1.6.3-r1.ebuild, +files/cups-1.6.3-colord-profile.patch,
+  cups-1.6.9999.ebuild, cups-1.7_rc1.ebuild, cups-9999.ebuild:
+  Add colord profile fix from Debian, bug 475714
+
+*cups-1.7_rc1 (12 Jul 2013)
+
+  12 Jul 2013; Andreas K. Huettel <dilfridge@gentoo.org> +cups-1.7_rc1.ebuild,
+  cups-9999.ebuild:
+  Fix build of master and add 1.7rc1 without keywords
+
+  12 Jul 2013; Andreas K. Huettel <dilfridge@gentoo.org> cups-1.6.9999.ebuild,
+  cups-9999.ebuild:
+  Whitespace
+
+*cups-1.6.9999 (12 Jul 2013)
+
+  12 Jul 2013; Andreas K. Huettel <dilfridge@gentoo.org> +cups-1.6.9999.ebuild,
+  cups-9999.ebuild:
+  Make live ebuild branch-capable and add live ebuild for stable branch 1.6
+
+*cups-1.6.3 (12 Jul 2013)
+
+  12 Jul 2013; Andreas K. Huettel <dilfridge@gentoo.org> +cups-1.6.3.ebuild,
+  cups-9999.ebuild:
+  Update SRC_URI and VCS; version bump
+
+  12 Jul 2013; Andreas K. Huettel <dilfridge@gentoo.org> -cups-1.5.0.ebuild:
+  No e-mail reply from contact. Removing.
 
   07 Jul 2013; Agostino Sarubbo <ago@gentoo.org> cups-1.6.2-r5.ebuild:
   Stable for ia64, wrt bug #442926
