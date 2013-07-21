@@ -1,8 +1,10 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-forensics/sleuthkit/sleuthkit-4.0.2.ebuild,v 1.2 2013/07/21 13:05:58 ago Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-forensics/sleuthkit/sleuthkit-4.1.0.ebuild,v 1.1 2013/07/21 10:31:23 radhermit Exp $
 
 EAPI=5
+AUTOTOOLS_AUTORECONF=1
+AUTOTOOLS_IN_SOURCE_BUILD=1
 
 inherit autotools-utils
 
@@ -11,8 +13,8 @@ HOMEPAGE="http://www.sleuthkit.org/sleuthkit/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2 IBM"
-SLOT="0/9" # subslot = major soname version
-KEYWORDS="amd64 ~hppa ~ppc ~x86"
+SLOT="0/10" # subslot = major soname version
+KEYWORDS="~amd64 ~hppa ~ppc ~x86"
 IUSE="aff ewf static-libs"
 
 DEPEND="dev-db/sqlite:3
@@ -24,12 +26,9 @@ RDEPEND="${DEPEND}
 DOCS=( NEWS.txt README.txt )
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-4.0.0-system-sqlite.patch
-	"${FILESDIR}"/${PN}-3.2.3-tools-shared-libs.patch
+	"${FILESDIR}"/${P}-system-sqlite.patch
+	"${FILESDIR}"/${P}-tools-shared-libs.patch
 )
-
-AUTOTOOLS_AUTORECONF=1
-AUTOTOOLS_IN_SOURCE_BUILD=1
 
 src_configure() {
 	local myeconfargs=(
