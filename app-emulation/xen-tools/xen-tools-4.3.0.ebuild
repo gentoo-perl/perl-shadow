@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.3.0.ebuild,v 1.6 2013/07/23 10:07:30 idella4 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.3.0.ebuild,v 1.10 2013/07/24 09:19:00 idella4 Exp $
 
 EAPI=5
 
@@ -32,7 +32,7 @@ DOCS=( README docs/README.xen-bugtool )
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="api custom-cflags debug doc flask hvm qemu ocaml pygrub screen static-libs xend"
+IUSE="api custom-cflags debug doc flask hvm qemu ocaml python pygrub screen static-libs xend"
 
 REQUIRED_USE="hvm? ( qemu )"
 
@@ -66,8 +66,9 @@ DEPEND="${CDEPEND}
 		dev-texlive/texlive-pictures
 		dev-texlive/texlive-latexrecommended
 	)
-	hvm? (  x11-proto/xproto
-		!net-libs/libiscsi )"
+	hvm? ( x11-proto/xproto
+		!net-libs/libiscsi )
+	qemu? ( x11-libs/pixman )"
 
 RDEPEND="${CDEPEND}
 	sys-apps/iproute2
@@ -150,7 +151,11 @@ src_prepare() {
 	fi
 
 	if ! use pygrub; then
-		sed -e '/^SUBDIRS-$(PYTHON_TOOLS) += pygrub$/d' -i tools/Makefile || die
+		sed -e '/^SUBDIRS-y += pygrub/d' -i tools/Makefile || die
+	fi
+
+	if ! use python; then
+		sed -e '/^SUBDIRS-y += python$/d' -i tools/Makefile || die
 	fi
 
 	# Disable hvm support on systems that don't support x86_32 binaries.
@@ -209,7 +214,7 @@ src_prepare() {
 		-i Config.mk || die
 
 	# Bug 477676
-	epatch "${FILESDIR}"/${PN}-4.3-ar.patch
+	epatch "${FILESDIR}"/${PN}-4.3-ar-cc.patch
 
 	epatch_user
 }
@@ -291,9 +296,10 @@ src_install() {
 		keepdir /var/log/xen-consoles
 	fi
 
+	# Move files built with use qemu, Bug #477884
 	if [[ "${ARCH}" == 'amd64' ]] && use qemu; then
 		mkdir -p "${D}"usr/$(get_libdir)/xen/bin || die
-		mv "${D}"usr/lib/xen/bin/{qemu*,vscclient,virtfs-proxy-helper} "${D}"usr/$(get_libdir)/xen/bin/ || die
+		mv "${D}"usr/lib/xen/bin/* "${D}"usr/$(get_libdir)/xen/bin/ || die
 	fi
 
 	# For -static-libs wrt Bug 384355

@@ -1,6 +1,22 @@
 # ChangeLog for app-emulation/xen-tools
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/ChangeLog,v 1.173 2013/07/23 10:07:30 idella4 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/ChangeLog,v 1.177 2013/07/24 09:19:00 idella4 Exp $
+
+  24 Jul 2013; Ian Delaney <idella4@gentoo.org> xen-tools-4.3.0.ebuild:
+  Add dep for IUSE qemu build, fixes Bug #477878 by 'a.m.', again
+
+  24 Jul 2013; Ian Delaney <idella4@gentoo.org> xen-tools-4.3.0.ebuild:
+  Correction to install with IUSE qemu, fixes Bug #477884, fixes Bug #477884
+
+  24 Jul 2013; Ian Delaney <idella4@gentoo.org> xen-tools-4.3.0.ebuild:
+  correct tools' Makefile re IUSE pygrub, add python use flag and corresponding
+  sed to Makefile, fixes Bug #477880 by 'a.m'
+
+  23 Jul 2013; Ian Delaney <idella4@gentoo.org>
+  +files/xen-tools-4.3-ar-cc.patch, -files/xen-tools-4.3-ar.patch,
+  xen-tools-4.3.0.ebuild:
+  renamed patch to capture ar & cc, extended the patch to honour tc-getCC,
+  almost fixes Bug #477676
 
   23 Jul 2013; Ian Delaney <idella4@gentoo.org> +files/xen-tools-4.3-ar.patch,
   xen-tools-4.3.0.ebuild:
