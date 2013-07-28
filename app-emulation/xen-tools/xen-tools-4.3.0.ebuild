@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.3.0.ebuild,v 1.12 2013/07/26 16:03:53 idella4 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.3.0.ebuild,v 1.14 2013/07/27 17:33:03 idella4 Exp $
 
 EAPI=5
 
@@ -53,10 +53,11 @@ DEPEND="${CDEPEND}
 	sys-devel/dev86
 	dev-lang/perl
 	app-misc/pax-utils
+	dev-python/markdown
+	media-gfx/transfig
 	doc? (
 		app-doc/doxygen
 		dev-tex/latex2html[png,gif]
-		media-gfx/transfig
 		media-gfx/graphviz
 		dev-tex/xcolor
 		dev-texlive/texlive-latexextra
@@ -117,9 +118,6 @@ pkg_setup() {
 			die "Unsupported architecture!"
 		fi
 	fi
-
-	use api     && export "LIBXENAPI_BINDINGS=y"
-	use flask   && export "FLASK_ENABLE=y"
 }
 
 src_prepare() {
@@ -196,7 +194,7 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN/-tools/}-4.2.0-nostrip.patch
 
 	# fix jobserver in Makefile
-	epatch "${FILESDIR}"/${PN/-tools/}-4.2.0-jserver.patch
+	epatch "${FILESDIR}"/${PN/-tools/}-4.3-jserver.patch
 
 	# add missing header
 	epatch "${FILESDIR}"/xen-4-ulong.patch
@@ -220,6 +218,10 @@ src_prepare() {
 		epatch "${FILESDIR}"/qemu-bridge.patch
 		mv tools/qemu-xen/qemu-bridge-helper.c tools/qemu-xen/xen-bridge-helper.c || die
 	fi
+
+	use flask || sed -e "/SUBDIRS-y += flask/d" -i tools/Makefile || die
+	use api   || sed -e "/SUBDIRS-\$(LIBXENAPI_BINDINGS) += libxen/d" -i tools/Makefile || die
+	sed -e 's:$(MAKE) PYTHON=$(PYTHON) subdirs-$@:LC_ALL=C &:' -i tools/firmware/Makefile || die
 
 	epatch_user
 }
