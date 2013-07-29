@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-office/libreoffice/libreoffice-9999-r2.ebuild,v 1.186 2013/07/16 16:43:48 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-office/libreoffice/libreoffice-9999-r2.ebuild,v 1.188 2013/07/29 13:26:35 scarabeus Exp $
 
 EAPI=5
 
@@ -71,7 +71,7 @@ unset ADDONS_URI
 unset EXT_URI
 unset ADDONS_SRC
 
-IUSE="bluetooth +branding +cups dbus debug eds gnome gstreamer +gtk
+IUSE="bluetooth +branding +cups dbus debug eds firebird gnome gstreamer +gtk
 gtk3 jemalloc kde mysql odk opengl postgres telepathy test +vba +webdav"
 
 LO_EXTS="nlpsolver presenter-minimizer scripting-beanshell scripting-javascript wiki-publisher"
@@ -119,7 +119,7 @@ COMMON_DEPEND="
 	>=dev-libs/nss-3.12.9
 	>=dev-lang/perl-5.0
 	>=dev-libs/openssl-1.0.0d
-	>=dev-libs/redland-1.0.14[ssl]
+	>=dev-libs/redland-1.0.16[ssl]
 	media-gfx/graphite2
 	>=media-libs/fontconfig-2.8.0
 	media-libs/freetype:2
@@ -140,6 +140,7 @@ COMMON_DEPEND="
 	cups? ( net-print/cups )
 	dbus? ( >=dev-libs/dbus-glib-0.92 )
 	eds? ( gnome-extra/evolution-data-server )
+	firebird? ( >=dev-db/firebird-2.5 )
 	gnome? ( gnome-base/gconf:2 )
 	gtk? (
 		x11-libs/gdk-pixbuf[X]
@@ -479,6 +480,7 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable dbus) \
 		$(use_enable eds evolution2) \
+		$(use_enable firebird firebird-sdbc) \
 		$(use_enable gnome gconf) \
 		$(use_enable gnome gio) \
 		$(use_enable gnome lockdown) \
