@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.2.2-r4.ebuild,v 1.2 2013/07/21 16:09:11 idella4 Exp $
+# $Header: /var/cvsroot/gentoo-x86/app-emulation/xen-tools/xen-tools-4.2.2-r4.ebuild,v 1.4 2013/07/30 07:08:35 idella4 Exp $
 
 EAPI=5
 
@@ -202,6 +202,9 @@ src_prepare() {
 	# Set dom0-min-mem to kb; Bug #472982
 	epatch "${FILESDIR}"/${PN/-tools/}-4.2-configsxp.patch
 
+	# Bug #
+	epatch "${FILESDIR}"/${P}-install.patch
+
 	#Security patches, currently valid
 	epatch "${FILESDIR}"/xen-4-CVE-2012-6075-XSA-41.patch \
 		"${FILESDIR}"/xen-4-CVE-2013-1922-XSA-48.patch \
@@ -227,6 +230,9 @@ src_prepare() {
 	# Bug 472438
 	sed -e 's:^BASH_COMPLETION_DIR ?= $(CONFIG_DIR)/bash_completion.d:BASH_COMPLETION_DIR ?= $(SHARE_DIR)/bash-completion:' \
 		-i Config.mk || die
+
+	# Bug 445986
+	sed -e 's:$(MAKE) PYTHON=$(PYTHON) subdirs-$@:LC_ALL=C "$(MAKE)" PYTHON=$(PYTHON) subdirs-$@:' -i tools/firmware/Makefile || die
 
 	epatch_user
 }
@@ -327,14 +333,6 @@ src_install() {
 	# Remove files failing QA AFTER emake installs them, avoiding seeking absent files
 	find "${D}" \( -name openbios-sparc32 -o -name openbios-sparc64 \
 		-o -name openbios-ppc -o -name palcode-clipper \) -delete || die
-
-	if use qemu; then
-		mv "${D}"usr/local/etc/qemu "${D}"etc/ || die
-		mv "${D}"usr/local/share/doc/qemu "${D}"usr/share/doc/{$PF}/ || die
-		mv "${D}"usr/local/share/man/man1/* "${D}"usr/share/man/man1/ || die
-		mv "${D}"usr/local/share/man/man8/* "${D}"usr/share/man/man8/ || die
-		rm -r "${D}"usr/local/ || die
-	fi
 }
 
 pkg_postinst() {
