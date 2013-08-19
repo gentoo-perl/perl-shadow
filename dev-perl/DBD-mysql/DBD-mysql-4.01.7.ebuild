@@ -1,6 +1,6 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-perl/DBD-mysql/DBD-mysql-4.01.7.ebuild,v 1.9 2011/07/30 10:24:20 tove Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-perl/DBD-mysql/DBD-mysql-4.01.7.ebuild,v 1.11 2013/08/19 05:14:39 patrick Exp $
 
 inherit versionator
 
